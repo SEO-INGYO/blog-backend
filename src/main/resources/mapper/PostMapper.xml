@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.backend.post.dao.PostMapper">
+    <select id="getAllPosts" resultType="com.example.backend.post.dto.PostAllResponse">
+        <![CDATA[
+        SELECT
+            p.id AS id,
+            p.title AS title,
+            p.content AS content,
+            p.category_id AS categoryId,
+            c.name AS categoryName,
+            GROUP_CONCAT(t.name SEPARATOR ', ') AS tags,
+            ur.username AS author,
+            ur.timestamp AS createdDate
+        FROM
+            posts p
+                JOIN categories c ON p.category_id = c.id
+                JOIN post_tag pt ON p.id = pt.post_id
+                JOIN tags t ON t.id = pt.tag_id
+                JOIN (
+                SELECT pa.id, ur.username, ur.timestamp
+                FROM posts_aud pa
+                         JOIN user_revision ur ON pa.rev = ur.id
+                WHERE pa.rev = (
+                    SELECT MIN(pa2.rev)
+                    FROM posts_aud pa2
+                    WHERE pa2.id = pa.id
+                )
+            ) ur ON p.id = ur.id
+        GROUP BY
+            p.id, p.title, p.content, p.category_id, c.name, ur.username, ur.timestamp
+        ]]>
+    </select>
+
+    <select id="getPostsByCategory" parameterType="String" resultType="com.example.backend.post.dto.PostAllResponse">
+        <![CDATA[
+        SELECT
+            p.id AS id,
+            p.title AS title,
+            p.content AS content,
+            p.category_id AS categoryId,
+            c.name AS categoryName,
+            GROUP_CONCAT(t.name SEPARATOR ', ') AS tags,
+            ur.username AS author,
+            ur.timestamp AS createdDate
+        FROM
+            posts p
+                JOIN categories c ON p.category_id = c.id
+                JOIN post_tag pt ON p.id = pt.post_id
+                JOIN tags t ON t.id = pt.tag_id
+                JOIN (
+                SELECT pa.id, ur.username, ur.timestamp
+                FROM posts_aud pa
+                         JOIN user_revision ur ON pa.rev = ur.id
+                WHERE pa.rev = (
+                    SELECT MIN(pa2.rev)
+                    FROM posts_aud pa2
+                    WHERE pa2.id = pa.id
+                )
+            ) ur ON p.id = ur.id
+        WHERE
+            c.name = #{category}
+        GROUP BY
+            p.id, p.title, p.content, p.category_id, c.name, ur.username, ur.timestamp
+        ]]>
+    </select>
+
+    <select id="getPostAllHistory" resultType="com.example.backend.post.dto.PostHistoryResponse">
+        SELECT pa.rev, pa.revtype, pa.id, pa.title, pa.content, pa.category_id, c.name AS catgory_name,ur.timestamp, ur.username
+        FROM posts_aud pa
+                 JOIN user_revision ur ON pa.rev = ur.id
+                 JOIN categories c ON pa.category_id = c.id
+        ORDER BY ur.timestamp DESC;
+    </select>
+</mapper>

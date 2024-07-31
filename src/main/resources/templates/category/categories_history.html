@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/layout}">
+<main class="container-sm pt-5" layout:fragment="content">
+  <!-- 메시지 표시 -->
+  <div th:if="${response}" th:text="${response.resultMessage}"></div>
+  <table class="main-table table table-bordered table-info text-center">
+    <thead>
+    <tr>
+      <th scope="col">버전 번호</th>
+      <th scope="col">수정된 시간</th>
+      <th scope="col">상태</th>
+      <th scope="col">ID</th>
+      <th scope="col">이름</th>
+      <th scope="col">수정자</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="category : ${categoryHistory}" th:id="'category-' + ${category.id}">
+      <td th:text="${category.rev}">버전 번호</td>
+      <td th:text="${category.timestamp}">수정된 시간</td>
+      <td>
+        <div th:switch="${category.revType}">
+          <span th:case="'0'">생성됨</span>
+          <span th:case="'1'">수정됨</span>
+          <span th:case="'2'">삭제됨</span>
+          <span th:case="*">알 수 없는 유형</span> <!-- 기본값 -->
+        </div>
+      </td>
+      <td th:text="${category.id}">태그 ID</td>
+      <td th:text="${category.name}">태그 이름</td>
+      <td th:text="${category.username}">수정자</td>
+    </tr>
+    </tbody>
+  </table>
+</main>
+</html>

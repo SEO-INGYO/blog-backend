@@ -1,0 +1,25 @@
+---
+#local
+spring:
+  datasource:
+    url: jdbc:mariadb://localhost:3307/local_db
+    username: local_user
+    password: 1qaz@wsx
+    driver-class-name: org.mariadb.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    open-in-view: false
+  config:
+    activate:
+      on-profile: local
+server:
+  Port: 80
+logging:
+  level:
+    org.springframework.web: DEBUG
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
+  mapper-locations: classpath:/mapper/*Mapper.xml

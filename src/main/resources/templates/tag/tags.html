@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/layout}">
+<main class="container-sm pt-5" layout:fragment="content">
+    <!-- 메시지 표시 -->
+    <div th:if="${response}" th:text="${response.resultMessage}"></div>
+    <h1 class="display-5">태그 목록</h1>
+    <div class="sub-menu">
+        <a class="btn btn-info" th:href="@{/admin/tags/new}">태그 생성</a>
+        <a class="btn btn-info" th:href="@{/admin/tags/history}">태그 전체 이력 조회</a>
+    </div>
+    <table class="main-table table table-bordered text-center">
+        <thead class="table-info">
+        <tr>
+            <th scope="col">태그 ID</th>
+            <th scope="col">이름</th>
+            <th scope="col">생성자</th>
+            <th scope="col">생성 시간</th>
+            <th scope="col">관리</th>
+        </tr>
+        </thead>
+        <tbody class="table-light">
+        <tr th:each="tag : ${tags}" th:id="'tag-' + ${tag.id}">
+            <td th:text="${tag.id}">태그 이름</td>
+            <td th:text="${tag.name}">태그 이름</td>
+            <td th:text="${tag.creator}">태그 이름</td>
+            <td th:text="${tag.createdDate}">태그 이름</td>
+            <td>
+                <div class="btn-group">
+                    <a th:href="@{/admin/tags/edit/{id}(id=${tag.id})}">수정</a>
+                    <form th:action="@{/admin/tags/delete/{id}(id=${tag.id})}" method="post">
+                        <input type="hidden" th:value="${_csrf.token}" name="_csrf">
+                        <button type="submit" onclick="return confirm('태그를 삭제하시겠습니까?')">삭제</button>
+                    </form>
+                    <a th:href="@{/admin/tags/history/{id}(id=${tag.id})}">이력</a>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</main>
+</html>

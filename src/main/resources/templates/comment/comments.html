@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/layout}">
+<main class="container pt-5" layout:fragment="content">
+    <!-- 메시지 표시 -->
+    <div th:if="${response}" th:text="${response.resultMessage}"></div>
+    <h3> 목록 <span class="badge text-bg-secondary"><a th:href="@{/admin/comments/new}">댓글 생성</a></span></h3>
+    <table class="table table-bordered table-info">
+        <thead>
+        <tr>
+            <th scope="col">이름</th>
+            <th scope="col">생성자</th>
+            <th scope="col">생성 일자</th>
+            <th scope="col">마지막 수정 일자</th>
+            <th scope="col">유형</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="comment : ${comments}" th:id="'comment-' + ${category.id}">
+            <td th:text="${comment.content}">댓글 내용</td>
+            <td>
+                <div>
+                    <a th:href="@{/admin/categories/edit/{id}(id=${category.id})}">수정</a>
+                    <form th:action="@{/admin/categories/delete/{id}(id=${category.id})}" method="post">
+                        <input type="hidden" th:value="${_csrf.token}" name="_csrf">
+                        <button type="submit" onclick="return confirm('카테고리를 삭제하시겠습니까?')">삭제</button>
+                    </form>
+                </div>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</main>
+</html>

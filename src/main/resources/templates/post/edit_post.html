@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/layout}">
+<main layout:fragment="content">
+    <input type="hidden" id="csrfToken" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+    <h1>게시글 수정</h1>
+    <form class="container" th:action="@{/admin/posts/edit/{id}(id=${post.id})}" th:object="${post}" method="post">
+        <input type="text" id="title" placeholder="제목" th:field="*{title}" />
+
+        <select id="category" name="category" th:field="*{category.id}">
+            <option th:each="category : ${categories}"
+                    th:value="${category.id}"
+                    th:text="${category.name}"
+                    th:selected="${category.id == post.category.id}"></option>
+        </select>
+
+        <textarea id="editor" th:field="*{content}"></textarea>
+        <script type="importmap">
+        {
+            "imports": {
+                "ckeditor5": "https://cdn.ckeditor.com/ckeditor5/42.0.1/ckeditor5.js",
+                "ckeditor5/": "https://cdn.ckeditor.com/ckeditor5/42.0.1/"
+            }
+        }
+        </script>
+        <script type="module" th:src="@{/javascript/editor.js}"></script>
+
+        <div>
+            <label for="tagInput">Tags:</label>
+            <input type="text" id="tagInput" placeholder="Enter tags separated by commas">
+            <button type="button" id="addTagBtn">태그 추가</button>
+        </div>
+
+        <div id="tagList"></div>
+
+        <input type="hidden" id="tagHiddenInput" name="tags" />
+
+        <button type="submit">저장</button>
+    </form>
+    <script th:inline="javascript">
+        let tags = [[${post.getTags()}]];
+        console.log(tags);
+
+        $(document).ready(function() {
+            tags.forEach(function(tag) {
+                $('#tagList').append('<span class="tag">' + tag.name + ' <a href="#" class="removeTag" data-tag="' + tag.name + '">x</a></span>');
+            });
+
+            $('#addTagBtn').click(function() {
+                let tagInput = $('#tagInput').val().trim();
+                if (tagInput !== '') {
+                    let tagExists = tags.some(function(tag) {
+                        return tag.name === tagInput;
+                    });
+                    if (!tagExists) {
+                        $('#tagList').append('<span class="tag">' + tagInput + ' <a href="#" class="removeTag" data-tag="' + tagInput + '">x</a></span>');
+                        tags.push({ name: tagInput });
+                        updateHiddenTagInput();
+                    }
+                    $('#tagInput').val('');
+                }
+            });
+
+            $('#tagList').on('click', '.removeTag', function() {
+                let tagToRemove = $(this).data('tag');
+                $(this).parent().remove();
+                tags = tags.filter(function(tag) {
+                    return tag.name !== tagToRemove;
+                });
+                updateHiddenTagInput();
+            });
+
+            function updateHiddenTagInput() {
+                $('#tagHiddenInput').val(tags.map(function(tag) {
+                    return tag.name;
+                }).join(','));
+            }
+        });
+    </script>
+    <a th:href="@{/admin/posts}">게시글 목록으로 돌아가기</a>
+</main>
+</html>

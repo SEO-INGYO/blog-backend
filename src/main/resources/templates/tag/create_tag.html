@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/layout}">
+<main layout:fragment="content">
+  <h1>태그 생성</h1>
+  <form th:action="@{/admin/tags}" th:object="${tag}" method="post">
+    <label for="name">이름</label>
+    <input type="text" id="name" th:field="*{name}" />
+
+    <button type="submit">저장</button>
+  </form>
+  <a th:href="@{/admin/tags}">카테고리 목록으로 돌아가기</a>
+</main>
+</html>

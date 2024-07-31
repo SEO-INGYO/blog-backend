@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" data-bs-theme="dark">
+    <head>
+        <title>Personal Blog Backoffice</title>
+        <link rel="stylesheet" type="text/css" th:href="@{/stylesheet/style.css}" />
+        <link rel="stylesheet" href="https://cdn.ckeditor.com/ckeditor5/42.0.1/ckeditor5.css" /><!-- Ckeditor 추가 -->
+
+        <script th:src="@{/javascript/bootstrap.min.js}"></script> <!-- BootStrap JS 추가 -->
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- jQuery 추가 -->
+    </head>
+    <body>
+        <header sec:authorize="isAuthenticated()" data-bs-theme="dark">
+            <nav class="navbar px-5">
+                <a class="navbar-brand" th:href="@{/}">홈</a>
+                <a class="navbar-brand" th:href="@{/admin/posts}">게시판</a>
+                <a class="navbar-brand" th:href="@{/admin/categories}">카테고리</a>
+                <a class="navbar-brand" th:href="@{/admin/tags}">태그</a>
+                <a class="btn btn-info" href="/logout" sec:authorize="isAuthenticated()">로그아웃</a>
+            </nav>
+        </header>
+
+        <main layout:fragment="content"></main>
+    </body>
+</html>

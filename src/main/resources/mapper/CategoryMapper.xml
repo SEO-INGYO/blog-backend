@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.backend.category.dao.CategoryMapper">
+    <select id="getCategories" resultType="com.example.backend.category.dto.CategoriesResponse">
+        SELECT c.id AS id,
+               c.name AS name,
+               ur.username AS creator,
+               ur.timestamp AS createdDate
+        FROM categories c
+                 JOIN (
+            SELECT ca.id,
+                   MIN(ur.timestamp) AS 최초_생성_시간
+            FROM categories_aud ca
+                     JOIN user_revision ur ON ca.rev = ur.id
+            GROUP BY ca.id
+        ) AS first_created ON c.id = first_created.id
+                 JOIN categories_aud ca ON c.id = ca.id AND ca.rev = (
+            SELECT ca_inner.rev
+            FROM categories_aud ca_inner
+            WHERE ca_inner.id = c.id
+            ORDER BY ca_inner.rev ASC
+            LIMIT 1
+            )
+            JOIN user_revision ur ON ca.rev = ur.id AND ur.timestamp = first_created.최초_생성_시간;
+    </select>
+
+    <select id="getAllCategoryHistory" resultType="com.example.backend.category.dto.CategoryHistoryAllResponse">
+        SELECT ca.rev, ca.revtype, ca.id, ca.name, ur.timestamp, ur.username
+        FROM categories_aud ca
+                 JOIN user_revision ur ON ca.rev = ur.id
+        ORDER BY ur.timestamp DESC;
+    </select>
+</mapper>

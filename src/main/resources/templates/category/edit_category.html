@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/layout}">
+    <main layout:fragment="content">
+        <h1>카테고리 수정</h1>
+        <form th:action="@{/admin/categories/edit/{id}(id=${category.id})}" th:object="${category}" method="post">
+            <label for="title">이름</label>
+            <input type="text" id="title" th:field="*{name}" />
+
+            <button type="submit">저장</button>
+        </form>
+        <a th:href="@{/admin/categories}">카테고리 목록으로 돌아가기</a>
+    </main>
+</html>

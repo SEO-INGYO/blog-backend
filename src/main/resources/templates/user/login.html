@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/layout}" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+    <main class="container position-absolute top-50 start-50 translate-middle" layout:fragment="content">
+        <div class="login-form border border-info">
+            <h1 class="display-4 mb-2 pb-2">Personal Blog Backoffice<i class="bi bi-layout-text-window"></i></h1>
+            <form th:action="@{/login}" method="post">
+                <input class="login-input form-control mb-2" placeholder="아이디" type="text" name="username" required />
+                <input class="login-input form-control mb-2" placeholder="비밀번호" type="password" name="password" required />
+                <div class="login-button d-grid gap-2 pt-3">
+                    <button class="btn btn-info" type="submit">로그인</button>
+                    <th:block th:if="${param.error != null}">
+                        아이디 및 비밀번호가 맞지 않습니다.
+                    </th:block>
+                    <th:block th:if="${param.logout != null}">
+                        정상적으로 로그아웃 완료 하였습니다.
+                    </th:block>
+                </div>
+            </form>
+        </div>
+    </main>
+</html>

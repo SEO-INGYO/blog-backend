@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/layout}">
+  <main class="container pt-5" layout:fragment="content">
+    <!-- 메시지 표시 -->
+    <div th:if="${response}" th:text="${response.resultMessage}"></div>
+    <h1 class="display-5">카테고리 목록</h1>
+    <div class="sub-menu">
+      <a class="btn btn-info"  th:href="@{/admin/categories/new}">카테고리 생성</a>
+      <a class="btn btn-info" th:href="@{/admin/categories/history}">카테고리 이력 조회</a>
+    </div>
+    <table class="main-table table table-bordered text-center">
+      <thead class="table-info">
+      <tr>
+        <th scope="col">카테고리 ID</th>
+        <th scope="col">이름</th>
+        <th scope="col">생성자</th>
+        <th scope="col">생성 시간</th>
+        <th scope="col">관리</th>
+      </tr>
+      </thead>
+      <tbody class="table-light">
+      <tr th:each="category : ${categories}" th:id="'category-' + ${category.id}">
+        <td th:text="${category.id}">카테고리 ID</td>
+        <td th:text="${category.name}">카테고리 이름</td>
+        <td th:text="${category.creator}">생성자</td>
+        <td th:text="${category.createdDate}">생성 시간</td>
+        <td>
+          <div class="btn-group">
+            <a th:href="@{/admin/categories/edit/{id}(id=${category.id})}">수정</a>
+            <form th:action="@{/admin/categories/delete/{id}(id=${category.id})}" method="post">
+              <input type="hidden" th:value="${_csrf.token}" name="_csrf">
+              <button type="submit" onclick="return confirm('카테고리를 삭제하시겠습니까?')">삭제</button>
+            </form>
+            <a th:href="@{/admin/posts/history/{id}(id=${category.id})}">이력</a>
+          </div>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </main>
+</html>
