@@ -17,7 +17,6 @@ import com.example.backend.tag.entity.Tag;
 import com.example.backend.user.dao.UserRepository;
 import com.example.backend.user.entity.User;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -31,7 +30,6 @@ import static com.example.backend.utils.HTMLUtils.stripHtmlTags;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class PostServiceImpl implements PostService {
     private final PostRepository postRepository;
     private final PostMapper postMapper;

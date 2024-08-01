@@ -9,7 +9,6 @@ import com.example.backend.tag.service.TagService;
 import com.example.backend.user.dao.UserRepository;
 import com.example.backend.user.entity.User;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -21,7 +20,6 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class TagServiceImpl implements TagService {
     ModelMapper modelMapper = new ModelMapper();
     private final TagRepository tagRepository;

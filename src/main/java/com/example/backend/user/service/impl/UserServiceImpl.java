@@ -6,14 +6,11 @@ import com.example.backend.user.dto.UserInfo;
 import com.example.backend.user.entity.User;
 import com.example.backend.user.service.UserService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository; // JPA Repository
     private final UserMapper userMapper; // MyBatis Mapper

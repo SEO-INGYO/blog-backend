@@ -2,7 +2,6 @@ package com.example.backend.post.service;
 
 import com.example.backend.base.dto.BaseResponse;
 import com.example.backend.post.dto.*;
-import com.example.backend.post.entity.Post;
 
 import java.util.List;
 
