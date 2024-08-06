@@ -28,9 +28,9 @@ public class PostAdminController {
 
     @Operation(summary = "Create", description = "새로운 게시글을 작성합니다.")
     @PostMapping("")
-    public String createPost(@ModelAttribute("post") CreatePostRequest createPostRequest, @RequestParam String tags, Model model) {
+    public String createPost(@ModelAttribute("post") CreatePostRequest createPostRequest, @RequestParam("content") String content, @RequestParam String tags, Model model) {
         try {
-            System.out.println(createPostRequest);
+            System.out.println(content);
             BaseResponse baseResponse = postService.createPost(createPostRequest, tags);
             model.addAttribute("response", baseResponse);
         } catch (Exception e) {

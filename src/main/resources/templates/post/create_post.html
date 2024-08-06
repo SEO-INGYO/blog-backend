@@ -4,7 +4,7 @@
         <input type="hidden" id="csrfToken" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
         <div>
             <h1>게시글 작성</h1>
-            <form class="container" th:action="@{/admin/posts}" th:object="${post}" method="post">
+            <form id="editor-form" class="container" th:action="@{/admin/posts}" th:object="${post}" method="post">
                 <input type="text" id="title" th:field="*{title}" />
 
                 <select id="category" name="category" th:field="*{category}">
@@ -13,7 +13,7 @@
                     </option>
                 </select>
 
-                <textarea id="editor" th:field="*{content}"></textarea>
+                <textarea id="editor" name="content"></textarea>
                 <script type="importmap">
                 {
                     "imports": {

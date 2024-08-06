@@ -23,7 +23,7 @@ public class Post {
     private String title;
 
     @Lob
-    @Column(name = "content") @Comment("Post Content")
+    @Column(columnDefinition = "TEXT", name = "content") @Comment("Post Content")
     private String content;
 
     @ManyToOne(fetch = FetchType.LAZY)

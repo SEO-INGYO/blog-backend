@@ -3,7 +3,7 @@
 <main layout:fragment="content">
     <input type="hidden" id="csrfToken" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
     <h1>게시글 수정</h1>
-    <form class="container" th:action="@{/admin/posts/edit/{id}(id=${post.id})}" th:object="${post}" method="post">
+    <form id="editor-form" class="container" th:action="@{/admin/posts/edit/{id}(id=${post.id})}" th:object="${post}" method="post">
         <input type="text" id="title" placeholder="제목" th:field="*{title}" />
 
         <select id="category" name="category" th:field="*{category.id}">

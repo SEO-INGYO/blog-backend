@@ -302,4 +302,16 @@ const editorConfig = {
     }
 };
 
-ClassicEditor.create(document.querySelector('#editor'), editorConfig);
+ClassicEditor
+    .create(document.querySelector('#editor'), editorConfig)
+    .then(ed => {
+        const editor = ed;
+        document.querySelector('#editor-form').addEventListener('submit', (event) => {
+            const data = editor.getData();
+            document.querySelector('#editor').value = data;
+            console.log(data);
+        });
+    })
+    .catch( error => {
+        console.error( error );
+    } );

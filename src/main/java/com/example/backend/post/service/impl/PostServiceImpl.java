@@ -22,6 +22,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.example.backend.utils.*;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -119,7 +120,7 @@ public class PostServiceImpl implements PostService {
 
             Post post = new Post();
             post.setTitle(createPostRequest.getTitle());
-            post.setContent(createPostRequest.getContent());
+            post.setContent(HTMLUtils.markdownToHtml(createPostRequest.getContent()));
             post.setCategory(category);
 
             postRepository.save(post);

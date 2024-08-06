@@ -3,8 +3,14 @@
     <main layout:fragment="content">
         <div class="content-container">
             <h1 th:text="${post.title}">제목</h1>
-            <div class="content" th:utext="${post.content}"></div>
+            <div id="post-content" class="content" th:utext="${post.content}"></div>
             <a th:href="@{/admin/posts}">목록으로 돌아가기</a>
         </div>
     </main>
+    <script>
+        const converter = new showdown.Converter();
+        const postContent = document.getElementById('post-content');
+        postContent.innerHTML = converter.makeHtml(postContent.textContent);
+        hljs.highlightAll();
+    </script>
 </html>

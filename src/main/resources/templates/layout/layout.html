@@ -3,10 +3,13 @@
     <head>
         <title>Personal Blog Backoffice</title>
         <link rel="stylesheet" type="text/css" th:href="@{/stylesheet/style.css}" />
-        <link rel="stylesheet" href="https://cdn.ckeditor.com/ckeditor5/42.0.1/ckeditor5.css" /><!-- Ckeditor 추가 -->
-
+        <link rel="stylesheet" href="https://cdn.ckeditor.com/ckeditor5/42.0.1/ckeditor5.css" /> <!-- Ckeditor 추가 -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.0/styles/default.min.css"> <!-- highlight.js 스타일시트 추가 -->
+    
         <script th:src="@{/javascript/bootstrap.min.js}"></script> <!-- BootStrap JS 추가 -->
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- jQuery 추가 -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.0/highlight.min.js"></script> <!-- highlight.js 스크립트 추가 -->
+        <script src="https://cdn.jsdelivr.net/npm/showdown/dist/showdown.min.js"></script>
     </head>
     <body>
         <header sec:authorize="isAuthenticated()" data-bs-theme="dark">
