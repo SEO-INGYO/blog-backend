@@ -12,18 +12,25 @@
         <thead class="table-info">
         <tr>
             <th scope="col">태그 ID</th>
-            <th scope="col">이름</th>
-            <th scope="col">생성자</th>
-            <th scope="col">생성 시간</th>
+            <th scope="col">태그 이름</th>
+            <th scope="col">태그 상태</th>
+            <th scope="col">태그 생성자 이름</th>
+            <th scope="col">태그 생성시간</th>
+            <th scope="col">태그 마지막 수정자 이름</th>
+            <th scope="col">태그 마지막 수정시간</th>
             <th scope="col">관리</th>
+            
         </tr>
         </thead>
         <tbody class="table-light">
         <tr th:each="tag : ${tags}" th:id="'tag-' + ${tag.id}">
-            <td th:text="${tag.id}">태그 이름</td>
+            <td th:text="${tag.id}">태그 ID</td>
             <td th:text="${tag.name}">태그 이름</td>
-            <td th:text="${tag.creator}">태그 이름</td>
-            <td th:text="${tag.createdDate}">태그 이름</td>
+            <td th:text="${tag.status}">태그 상태</td>
+            <td th:text="${tag.createdUserName}">태그 생성자 이름</td>
+            <td th:text="${tag.createdTime}">태그 생성시간</td>
+            <td th:text="${tag.lastModifiedUserName}">태그 마지막 수정자 이름</td>
+            <td th:text="${tag.lastModifiedTime}">태그 마지막 수정시간</td>
             <td>
                 <div class="btn-group">
                     <a th:href="@{/admin/tags/edit/{id}(id=${tag.id})}">수정</a>

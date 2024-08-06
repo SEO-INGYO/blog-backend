@@ -10,6 +10,9 @@ import lombok.NoArgsConstructor;
 public class TagsResponse {
     private Long id;
     private String name;
-    private String creator;
-    private String createdDate;
+    private String status;
+    private Long createdUserName;
+    private String createdTime;
+    private Long lastModifiedUserName;
+    private String lastModifiedTime;
 }

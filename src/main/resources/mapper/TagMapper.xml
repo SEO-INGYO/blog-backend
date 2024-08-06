@@ -3,32 +3,17 @@
 
 <mapper namespace="com.example.backend.tag.dao.TagMapper">
     <select id="getAllTags" resultType="com.example.backend.tag.dto.TagsResponse">
-        SELECT t.id AS id,
-               t.name AS name,
-               ur.username AS creator,
-               ur.timestamp AS createdDate
+        SELECT t.id, t.name, t.status, 
+               t.created_time, u.username AS created_user_name, 
+               t.last_modified_time, u2.username AS last_modified_user_name
         FROM tags t
-                 JOIN (
-            SELECT ta.id,
-                   MIN(ur.timestamp) AS 최초_생성_시간
-            FROM tags_aud ta
-                     JOIN user_revision ur ON ta.rev = ur.id
-            GROUP BY ta.id
-        ) AS first_created ON t.id = first_created.id
-                 JOIN tags_aud ta ON t.id = ta.id AND ta.rev = (
-            SELECT ta_inner.rev
-            FROM tags_aud ta_inner
-            WHERE ta_inner.id = t.id
-            ORDER BY ta_inner.rev ASC
-            LIMIT 1
-            )
-            JOIN user_revision ur ON ta.rev = ur.id AND ur.timestamp = first_created.최초_생성_시간;
+        LEFT JOIN users u ON t.created_user_id = u.id
+        LEFT JOIN users u2 ON t.last_modified_user_id = u2.id
+        WHERE t.status != 'DELETE';
     </select>
 
     <select id="getAllTagHistory" resultType="com.example.backend.tag.dto.TagHistoryAllResponse">
-        SELECT ta.rev, ta.revtype, ta.id, ta.name, ur.timestamp, ur.username
-        FROM tags_aud ta
-        JOIN user_revision ur ON ta.rev = ur.id
-        ORDER BY ur.timestamp DESC;
+        SELECT tag_id, change_time, change_user, change_type, old_name, new_name
+        FROM tag_history;
     </select>
 </mapper>
