@@ -11,8 +11,8 @@ public class TagsResponse {
     private Long id;
     private String name;
     private String status;
-    private Long createdUserName;
+    private String createdUserName;
     private String createdTime;
-    private Long lastModifiedUserName;
+    private String lastModifiedUserName;
     private String lastModifiedTime;
 }
