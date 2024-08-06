@@ -170,7 +170,7 @@ public class PostServiceImpl implements PostService {
         try {
             Post post = postRepository.findById(updatePostRequest.getId()).orElseThrow(() -> new RuntimeException("Post not found"));
             post.setTitle(updatePostRequest.getTitle());
-            post.setContent(updatePostRequest.getContent());
+            post.setContent(HTMLUtils.markdownToHtml(updatePostRequest.getContent()));
             Category category = categoryRepository.findCategoryByName(updatePostRequest.getCategory());
             if (category == null) {
                 baseResponse.setResultMessage("실패 - 해당 카테고리를 찾을 수 없습니다.");
@@ -215,7 +215,7 @@ public class PostServiceImpl implements PostService {
         BaseResponse baseResponse = new BaseResponse();
         try {
             Post post = postRepository.findById(deletePostRequest.getId()).orElseThrow(() -> new Exception("Post not found"));
-            postRepository.save(post);
+            postRepository.delete(post);
 
             baseResponse.setResultMessage("성공");
             baseResponse.setResultCode(01);
