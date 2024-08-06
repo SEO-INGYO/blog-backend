@@ -32,13 +32,6 @@ public class TagServiceImpl implements TagService {
     @Override
     @Transactional(readOnly = true)
     public List<TagsResponse> getAllTags(){
-        // 인증 정보에서 사용자 이름 가져오기
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = null;
-        if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
-            username = ((UserDetails) authentication.getPrincipal()).getUsername();
-        }
-
         return tagMapper.getAllTags();
     }
 
@@ -51,7 +44,32 @@ public class TagServiceImpl implements TagService {
     @Override
     @Transactional(readOnly = true)
     public TagDto getTags(Long id) {
+        // 인증 정보에서 사용자 이름 가져오기
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = null;
+        if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
+            username = ((UserDetails) authentication.getPrincipal()).getUsername();
+        }
+
+        // 사용자 정보 조회
+        User author = userRepository.findByUsername(username);
+
         Tag tag = tagRepository.findById(id).orElseThrow(() -> new RuntimeException("태그를 찾을 수 없습니다."));
+
+        // 기존 태그 정보를 저장하기 위해 oldData 준비
+        String oldData = tag.getName();
+
+        // 태그 변경 이력 기록
+        TagHistory tagHistory = new TagHistory();
+        tagHistory.setTagId(tag.getId());
+        tagHistory.setChangeTime(LocalDateTime.now());
+        tagHistory.setChangeUser(author.getUsername());
+        tagHistory.setChangeType("READ");
+        tagHistory.setOldData(oldData);
+        tagHistory.setNewData(oldData);
+
+        tagHistoryRepository.save(tagHistory);
+
         TagDto tagDto = modelMapper.map(tag, TagDto.class);
         return tagDto;
     }
