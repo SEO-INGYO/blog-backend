@@ -9,6 +9,7 @@ public interface TagService {
     List<TagsResponse> getAllTags();
     List<TagHistoryAllResponse> getAllTagHistory();
     TagDto getTags(Long id);
+    TagDto getTag(Long id);
     BaseResponse createTag(TagNameRequest tagNameRequest);
     BaseResponse updateTag(TagIdNameRequest tagIdNameRequest);
     BaseResponse deleteTag(TagIdRequest tagIdRequest);

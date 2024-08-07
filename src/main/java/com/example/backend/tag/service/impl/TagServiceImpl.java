@@ -9,6 +9,8 @@ import com.example.backend.tag.entity.TagHistory;
 import com.example.backend.tag.service.TagService;
 import com.example.backend.user.dao.UserRepository;
 import com.example.backend.user.entity.User;
+import com.example.backend.utils.JsonUtils;
+
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.core.Authentication;
@@ -44,6 +46,15 @@ public class TagServiceImpl implements TagService {
     @Override
     @Transactional(readOnly = true)
     public TagDto getTags(Long id) {
+        Tag tag = tagRepository.findById(id).orElseThrow(() -> new RuntimeException("태그를 찾을 수 없습니다."));
+
+        TagDto tagDto = modelMapper.map(tag, TagDto.class);
+        return tagDto;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public TagDto getTag(Long id) {
         // 인증 정보에서 사용자 이름 가져오기
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = null;
@@ -119,7 +130,7 @@ public class TagServiceImpl implements TagService {
             tagHistory.setChangeUser(author.getUsername());
             tagHistory.setChangeType("CREATE");
             tagHistory.setOldData(null);
-            tagHistory.setNewData(savedTag.getName());
+            tagHistory.setNewData(JsonUtils.convertToJsonString("name", savedTag.getName()));
 
             tagHistoryRepository.save(tagHistory);
 
@@ -164,7 +175,7 @@ public class TagServiceImpl implements TagService {
             Tag tag = tagRepository.findById(tagIdNameRequest.getId()).orElseThrow(() -> new RuntimeException("태그를 찾을 수 없습니다."));
 
             // 기존 태그 정보를 저장하기 위해 oldData 준비
-            String oldData = tag.getName();
+            String oldData = JsonUtils.convertToJsonString("name", tag.getName());
 
             // 태그 정보 업데이트
             tag.setName(tagIdNameRequest.getName());
@@ -180,7 +191,7 @@ public class TagServiceImpl implements TagService {
             tagHistory.setChangeUser(author.getUsername());
             tagHistory.setChangeType("UPDATE");
             tagHistory.setOldData(oldData);
-            tagHistory.setNewData(savedTag.getName());
+            tagHistory.setNewData(JsonUtils.convertToJsonString("name", savedTag.getName()));
 
             tagHistoryRepository.save(tagHistory);
 
@@ -229,7 +240,7 @@ public class TagServiceImpl implements TagService {
             tagHistory.setChangeTime(LocalDateTime.now());
             tagHistory.setChangeUser(author.getUsername());
             tagHistory.setChangeType("DELETE");
-            tagHistory.setOldData(tag.getName()); // 삭제 전 데이터
+            tagHistory.setOldData(JsonUtils.convertToJsonString("name", tag.getName())); // 삭제 전 데이터
             tagHistory.setNewData(null); // 삭제 후 데이터는 null
 
             tagHistoryRepository.save(tagHistory);

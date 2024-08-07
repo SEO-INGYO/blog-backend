@@ -10,6 +10,9 @@ import lombok.NoArgsConstructor;
 public class CategoriesResponse {
     private Long id;
     private String name;
-    private String creator;
-    private String createdDate;
+    private String status;
+    private String createdUserName;
+    private String createdTime;
+    private String lastModifiedUserName;
+    private String lastModifiedTime;
 }
