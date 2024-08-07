@@ -4,17 +4,17 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.sql.Timestamp;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class PostHistoryResponse {
-    private long rev;
-    private long revType;
-    private long id;
-    private String title;
-    private String content;
-    private String categoryId;
-    private String categoryName;
-    private String timestamp;
-    private String username;
+    private Long id;
+    private Long postId;
+    private Timestamp changeTime;
+    private String changeUser;
+    private String changeType;
+    private String oldPost;
+    private String newPost;
 }

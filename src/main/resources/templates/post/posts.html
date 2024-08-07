@@ -13,11 +13,10 @@
                 <th scope="col">게시글 ID</th>
                 <th scope="col">제목</th>
                 <th scope="col">내용</th>
-                <th scope="col">카테고리 ID</th>
-                <th scope="col">카테고리 이름</th>
+                <th scope="col">카테고리</th>
                 <th scope="col">태그</th>
-                <th scope="col">작성자</th>
-                <th scope="col">작성 시간</th>
+                <th scope="col">게시글 상태</th>
+                <th scope="col">마지막 수정자</th>
                 <th scope="col">관리</th>
             </tr>
             </thead>
@@ -25,14 +24,13 @@
             <tr th:each="post : ${posts}" th:id="'post-' + ${post.id}">
                 <td th:text="${post.id}">게시글 ID</td>
                 <th scope="row">
-                    <a th:href="@{/admin/posts/{id}(id=${post.id})}" th:text="${post.title}">게시글 제목</a>
+                    <a th:href="@{/admin/posts/{id}(id=${post.id})}" th:text="${post.title}">제목</a>
                 </th>
-                <td th:text="${post.content}">게시글 내용</td>
-                <td th:text="${post.categoryId}">카테고리 ID</td>
-                <td th:text="${post.categoryName}">카테고리 이름</td>
-                <td th:text="${post.tags}">카테고리 이름</td>
-                <td th:text="${post.author}">카테고리 이름</td>
-                <td th:text="${post.createdDate}">카테고리 이름</td>
+                <td th:text="${post.content}">내용</td>
+                <td th:text="${post.category}">카테고리</td>
+                <td th:text="${post.tags}">태그</td>
+                <td th:text="${post.status}">게시글 상태</td>
+                <td th:text="${post.lastModifyUser}">마지막 수정자</td>
                 <td>
                     <div class="btn-group">
                         <a th:href="@{/admin/posts/edit/{id}(id=${post.id})}">수정</a>
