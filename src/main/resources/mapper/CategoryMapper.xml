@@ -3,32 +3,17 @@
 
 <mapper namespace="com.example.backend.category.dao.CategoryMapper">
     <select id="getCategories" resultType="com.example.backend.category.dto.CategoriesResponse">
-        SELECT c.id AS id,
-               c.name AS name,
-               ur.username AS creator,
-               ur.timestamp AS createdDate
+        SELECT c.id, c.name, c.status, 
+               c.created_time, u.username AS created_user_name, 
+               c.last_modified_time, u2.username AS last_modified_user_name
         FROM categories c
-                 JOIN (
-            SELECT ca.id,
-                   MIN(ur.timestamp) AS 최초_생성_시간
-            FROM categories_aud ca
-                     JOIN user_revision ur ON ca.rev = ur.id
-            GROUP BY ca.id
-        ) AS first_created ON c.id = first_created.id
-                 JOIN categories_aud ca ON c.id = ca.id AND ca.rev = (
-            SELECT ca_inner.rev
-            FROM categories_aud ca_inner
-            WHERE ca_inner.id = c.id
-            ORDER BY ca_inner.rev ASC
-            LIMIT 1
-            )
-            JOIN user_revision ur ON ca.rev = ur.id AND ur.timestamp = first_created.최초_생성_시간;
+        LEFT JOIN users u ON c.created_user_id = u.id
+        LEFT JOIN users u2 ON c.last_modified_user_id = u2.id
+        WHERE c.status != 'DELETE';
     </select>
 
     <select id="getAllCategoryHistory" resultType="com.example.backend.category.dto.CategoryHistoryAllResponse">
-        SELECT ca.rev, ca.revtype, ca.id, ca.name, ur.timestamp, ur.username
-        FROM categories_aud ca
-                 JOIN user_revision ur ON ca.rev = ur.id
-        ORDER BY ur.timestamp DESC;
+        SELECT id, category_id, change_time, change_user, change_type, old_data, new_data
+        FROM category_history;
     </select>
 </mapper>

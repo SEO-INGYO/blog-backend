@@ -6,29 +6,22 @@
   <table class="main-table table table-bordered table-info text-center">
     <thead>
     <tr>
-      <th scope="col">버전 번호</th>
-      <th scope="col">수정된 시간</th>
-      <th scope="col">상태</th>
-      <th scope="col">ID</th>
-      <th scope="col">이름</th>
-      <th scope="col">수정자</th>
+      <th scope="col">이력 대상 태그 ID</th>
+      <th scope="col">이력 시간</th>
+      <th scope="col">이력 타입</th>
+      <th scope="col">변경 전 데이터</th>
+      <th scope="col">변경 후 데이터</th>
+      <th scope="col">이력 행위자</th>
     </tr>
     </thead>
     <tbody>
     <tr th:each="tag : ${tagHistory}" th:id="'tag-' + ${tag.id}">
-      <td th:text="${tag.rev}">버전 번호</td>
-      <td th:text="${tag.timestamp}">수정된 시간</td>
-      <td>
-        <div th:switch="${tag.revType}">
-          <span th:case="'0'">생성됨</span>
-          <span th:case="'1'">수정됨</span>
-          <span th:case="'2'">삭제됨</span>
-          <span th:case="*">알 수 없는 유형</span> <!-- 기본값 -->
-        </div>
-      </td>
-      <td th:text="${tag.id}">태그 ID</td>
-      <td th:text="${tag.name}">태그 이름</td>
-      <td th:text="${tag.username}">수정자</td>
+      <td th:text="${tag.tagId}">이력 대상 태그 ID</td>
+      <td th:text="${tag.changeTime}">이력 시간</td>
+      <td th:text="${tag.changeType}">이력 타입</td>
+      <td th:text="${tag.oldData}">변경 전 데이터</td>
+      <td th:text="${tag.newData}">변경 후 데이터</td>
+      <td th:text="${tag.changeUser}">이력 행위자</td>
     </tr>
     </tbody>
   </table>

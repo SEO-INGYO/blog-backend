@@ -13,7 +13,7 @@
     </select>
 
     <select id="getAllTagHistory" resultType="com.example.backend.tag.dto.TagHistoryAllResponse">
-        SELECT tag_id, change_time, change_user, change_type, old_name, new_name
+        SELECT id, tag_id, change_time, change_user, change_type, old_data, new_data
         FROM tag_history;
     </select>
 </mapper>

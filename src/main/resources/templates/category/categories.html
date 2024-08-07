@@ -12,9 +12,12 @@
       <thead class="table-info">
       <tr>
         <th scope="col">카테고리 ID</th>
-        <th scope="col">이름</th>
-        <th scope="col">생성자</th>
-        <th scope="col">생성 시간</th>
+        <th scope="col">카테고리 이름</th>
+        <th scope="col">카테고리 상태</th>
+        <th scope="col">카테고리 생성자 이름</th>
+        <th scope="col">카테고리 생성시간</th>
+        <th scope="col">카테고리 마지막 수정자 이름</th>
+        <th scope="col">카테고리 마지막 수정시간</th>
         <th scope="col">관리</th>
       </tr>
       </thead>
@@ -22,8 +25,11 @@
       <tr th:each="category : ${categories}" th:id="'category-' + ${category.id}">
         <td th:text="${category.id}">카테고리 ID</td>
         <td th:text="${category.name}">카테고리 이름</td>
-        <td th:text="${category.creator}">생성자</td>
-        <td th:text="${category.createdDate}">생성 시간</td>
+        <td th:text="${category.status}">카테고리 상태</td>
+        <td th:text="${category.createdUserName}">카테고리 생성자 이름</td>
+        <td th:text="${category.createdTime}">카테고리 생성시간</td>
+        <td th:text="${category.lastModifiedUserName}">카테고리 마지막 수정자 이름</td>
+        <td th:text="${category.lastModifiedTime}">카테고리 마지막 수정시간</td>
         <td>
           <div class="btn-group">
             <a th:href="@{/admin/categories/edit/{id}(id=${category.id})}">수정</a>
