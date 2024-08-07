@@ -1,15 +1,10 @@
-CREATE TABLE post_tag
-(
-    id      bigint auto_increment
-        primary key,
-    post_id bigint not null,
-    tag_id  bigint not null,
-    constraint post_tag_ibfk_1
-        foreign key (post_id) references posts (id),
-    constraint FK_post_tag_posts
-        foreign key (post_id) references posts (id),
-    constraint post_tag_ibfk_2
-        foreign key (tag_id) references tags (id),
-    constraint FK_post_tag_tags
-        foreign key (tag_id) references tags (id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE = utf8mb4_unicode_ci;
+CREATE TABLE `post_tag` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'Primary Key',
+  `post_id` bigint(20) DEFAULT NULL,
+  `tag_id` bigint(20) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `FKogo3xicgxxbhoekuj3i4aiatb` (`post_id`),
+  KEY `FK98d0eqovrn75s8a74oebe4sn1` (`tag_id`),
+  CONSTRAINT `FK98d0eqovrn75s8a74oebe4sn1` FOREIGN KEY (`tag_id`) REFERENCES `tags` (`id`),
+  CONSTRAINT `FKogo3xicgxxbhoekuj3i4aiatb` FOREIGN KEY (`post_id`) REFERENCES `posts` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
