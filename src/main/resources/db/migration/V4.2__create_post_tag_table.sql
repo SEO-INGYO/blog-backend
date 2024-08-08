@@ -7,4 +7,4 @@ CREATE TABLE `post_tag` (
   KEY `FK98d0eqovrn75s8a74oebe4sn1` (`tag_id`),
   CONSTRAINT `FK98d0eqovrn75s8a74oebe4sn1` FOREIGN KEY (`tag_id`) REFERENCES `tags` (`id`),
   CONSTRAINT `FKogo3xicgxxbhoekuj3i4aiatb` FOREIGN KEY (`post_id`) REFERENCES `posts` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

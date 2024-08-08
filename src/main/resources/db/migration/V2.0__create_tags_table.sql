@@ -3,7 +3,7 @@ CREATE TABLE `tags` (
   `created_time` datetime(6) NOT NULL,
   `last_modified_time` datetime(6) NOT NULL,
   `name` varchar(100) NOT NULL,
-  `status` enum('CREATE','DELETE','READ','UPDATE') NOT NULL,
+  `status` enum('PUBLISHED','UNPUBLISHED') NOT NULL,
   `created_user_id` bigint(20) NOT NULL,
   `last_modified_user_id` bigint(20) NOT NULL,
   PRIMARY KEY (`id`),
@@ -12,4 +12,4 @@ CREATE TABLE `tags` (
   KEY `FKdjdhcdy8g7v49e7euc4ryhkhy` (`last_modified_user_id`),
   CONSTRAINT `FKb4o4pbgxx4u9hgt26uj46342k` FOREIGN KEY (`created_user_id`) REFERENCES `users` (`id`),
   CONSTRAINT `FKdjdhcdy8g7v49e7euc4ryhkhy` FOREIGN KEY (`last_modified_user_id`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='JOIN 테이블';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='JOIN 테이블';

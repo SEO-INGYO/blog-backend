@@ -3,7 +3,7 @@ CREATE TABLE `categories` (
   `created_time` datetime(6) NOT NULL,
   `last_modified_time` datetime(6) NOT NULL,
   `name` varchar(100) NOT NULL,
-  `status` enum('CREATE','DELETE','READ','UPDATE') NOT NULL,
+  `visible` enum('PUBLISHED','UNPUBLISHED') NOT NULL,
   `created_user_id` bigint(20) NOT NULL,
   `last_modified_user_id` bigint(20) NOT NULL,
   PRIMARY KEY (`id`),
@@ -12,4 +12,4 @@ CREATE TABLE `categories` (
   KEY `FKneeyj56v8y1k5adifpt3p3erv` (`last_modified_user_id`),
   CONSTRAINT `FKd44ckrw5mltoycak34oppfygf` FOREIGN KEY (`created_user_id`) REFERENCES `users` (`id`),
   CONSTRAINT `FKneeyj56v8y1k5adifpt3p3erv` FOREIGN KEY (`last_modified_user_id`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
