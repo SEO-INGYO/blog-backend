@@ -1,7 +1,6 @@
 package com.example.backend.post.entity;
 
 import com.example.backend.category.entity.Category;
-import com.example.backend.enums.StatusEnum;
 import com.example.backend.enums.VisibleEnum;
 
 import jakarta.persistence.*;

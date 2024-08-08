@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.time.LocalDateTime;
 
-import com.example.backend.enums.StatusEnum;
 import com.example.backend.enums.VisibleEnum;
 
 @Entity
