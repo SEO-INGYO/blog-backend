@@ -2,6 +2,8 @@ package com.example.backend.comment.entity;
 
 import org.hibernate.annotations.Comment;
 
+import com.example.backend.enums.StatusEnum;
+
 import lombok.Data;
 import jakarta.persistence.*;
 import java.sql.*;
@@ -28,9 +30,9 @@ public class CommentHistory {
     @Comment("변경 사용자")
     private String changeUser;
 
-    @Column(name = "change_type", length = 100, nullable = false)
-    @Comment("변경 타입")
-    private String changeType;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", length = 100, nullable = false)
+    private StatusEnum status;
 
     @Column(name = "old_content", length = 100, nullable = true)
     private String oldContent;

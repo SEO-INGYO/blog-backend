@@ -1,7 +1,8 @@
 package com.example.backend.post.entity;
 
 import com.example.backend.category.entity.Category;
-import com.example.backend.enums.Status;
+import com.example.backend.enums.StatusEnum;
+import com.example.backend.enums.VisibleEnum;
 
 import jakarta.persistence.*;
 import lombok.Data;
@@ -36,7 +37,7 @@ public class Post {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", length = 100, nullable = false)
-    private Status status;
+    private VisibleEnum visible;
 
     @Column(name = "last_modified_user", length = 100, nullable = false)
     private String lastModifyUser;

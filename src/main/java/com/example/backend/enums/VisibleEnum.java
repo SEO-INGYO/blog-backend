@@ -4,8 +4,8 @@ import lombok.Getter;
 
 @Getter
 public enum VisibleEnum {
-    공개됨("PUBLISHED", "공개됨"),
-    비공개됨("UNPUBLISHED","비공개됨");
+    PUBLISHED("PUBLISHED", "공개됨"),
+    UNPUBLISHED("UNPUBLISHED","비공개됨");
 
     private final String code;
     private final String name;

@@ -2,6 +2,8 @@ package com.example.backend.tag.entity;
 
 import org.hibernate.annotations.Comment;
 
+import com.example.backend.enums.StatusEnum;
+
 import lombok.Data;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
@@ -25,8 +27,9 @@ public class TagHistory {
     @Column(name = "change_user", length = 100, nullable = false)
     private String changeUser;
 
-    @Column(name = "change_type", length = 100, nullable = false)
-    private String changeType;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", length = 100, nullable = false)
+    private StatusEnum status;
 
     @Column(name = "old_data", columnDefinition = "TEXT")
     @Comment("변경 전 Tag 내용 (JSON 형식)")

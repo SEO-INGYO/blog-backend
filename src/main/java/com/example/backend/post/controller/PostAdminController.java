@@ -87,6 +87,8 @@ public class PostAdminController {
             updatePostRequest.setId(id);
             System.out.println(updatePostRequest);
             BaseResponse baseResponse = postService.updatePost(updatePostRequest);
+            System.out.println(baseResponse);
+            System.out.println("---------------------결과-------------------------");
             model.addAttribute("response", baseResponse);
         } catch (Exception e) {
             e.printStackTrace();

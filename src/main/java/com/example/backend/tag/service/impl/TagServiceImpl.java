@@ -1,7 +1,8 @@
 package com.example.backend.tag.service.impl;
 
 import com.example.backend.base.dto.BaseResponse;
-import com.example.backend.enums.Status;
+import com.example.backend.enums.StatusEnum;
+import com.example.backend.enums.VisibleEnum;
 import com.example.backend.tag.dao.*;
 import com.example.backend.tag.dto.*;
 import com.example.backend.tag.entity.Tag;
@@ -75,7 +76,7 @@ public class TagServiceImpl implements TagService {
         tagHistory.setTagId(tag.getId());
         tagHistory.setChangeTime(LocalDateTime.now());
         tagHistory.setChangeUser(author.getUsername());
-        tagHistory.setChangeType("READ");
+        tagHistory.setStatus(StatusEnum.READED);
         tagHistory.setOldData(oldData);
         tagHistory.setNewData(oldData);
 
@@ -119,7 +120,7 @@ public class TagServiceImpl implements TagService {
             tag.setCreatedTime(LocalDateTime.now());
             tag.setLastModifiedUser(author);
             tag.setLastModifiedTime(LocalDateTime.now());
-            tag.setStatus(Status.CREATE);
+            tag.setVisible(VisibleEnum.PUBLISHED);
 
             Tag savedTag = tagRepository.save(tag);
 
@@ -128,7 +129,7 @@ public class TagServiceImpl implements TagService {
             tagHistory.setTagId(savedTag.getId());
             tagHistory.setChangeTime(LocalDateTime.now());
             tagHistory.setChangeUser(author.getUsername());
-            tagHistory.setChangeType("CREATE");
+            tagHistory.setStatus(StatusEnum.CREATED);
             tagHistory.setOldData(null);
             tagHistory.setNewData(JsonUtils.convertToJsonString("name", savedTag.getName()));
 
@@ -189,7 +190,7 @@ public class TagServiceImpl implements TagService {
             tagHistory.setTagId(tag.getId());
             tagHistory.setChangeTime(LocalDateTime.now());
             tagHistory.setChangeUser(author.getUsername());
-            tagHistory.setChangeType("UPDATE");
+            tagHistory.setStatus(StatusEnum.UPDATEED);
             tagHistory.setOldData(oldData);
             tagHistory.setNewData(JsonUtils.convertToJsonString("name", savedTag.getName()));
 
@@ -239,14 +240,14 @@ public class TagServiceImpl implements TagService {
             tagHistory.setTagId(tag.getId());
             tagHistory.setChangeTime(LocalDateTime.now());
             tagHistory.setChangeUser(author.getUsername());
-            tagHistory.setChangeType("DELETE");
+            tagHistory.setStatus(StatusEnum.DELETEED);
             tagHistory.setOldData(JsonUtils.convertToJsonString("name", tag.getName())); // 삭제 전 데이터
             tagHistory.setNewData(null); // 삭제 후 데이터는 null
 
             tagHistoryRepository.save(tagHistory);
 
             // 태그 상태 업데이트
-            tag.setStatus(Status.DELETE); // 상태를 DELETE로 변경
+            tag.setVisible(VisibleEnum.UNPUBLISHED); // 상태를 DELETE로 변경
             tag.setLastModifiedUser(author);
             tag.setLastModifiedTime(LocalDateTime.now());
 
@@ -283,7 +284,7 @@ public class TagServiceImpl implements TagService {
             tag.setCreatedTime(LocalDateTime.now());
             tag.setLastModifiedUser(author);
             tag.setLastModifiedTime(LocalDateTime.now());
-            tag.setStatus(Status.CREATE);
+            tag.setVisible(VisibleEnum.PUBLISHED);
 
             Tag savedTag = tagRepository.save(tag);
 
@@ -292,7 +293,7 @@ public class TagServiceImpl implements TagService {
             tagHistory.setTagId(savedTag.getId());
             tagHistory.setChangeTime(LocalDateTime.now());
             tagHistory.setChangeUser(author.getUsername());
-            tagHistory.setChangeType("CREATE");
+            tagHistory.setStatus(StatusEnum.CREATED);
             tagHistory.setOldData(null);
             tagHistory.setNewData(JsonUtils.convertToJsonString("name", savedTag.getName()));
 

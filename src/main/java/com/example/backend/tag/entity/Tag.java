@@ -11,7 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.time.LocalDateTime;
 
-import com.example.backend.enums.Status;
+import com.example.backend.enums.StatusEnum;
+import com.example.backend.enums.VisibleEnum;
 
 @Entity
 @Table(name="tags", uniqueConstraints = @UniqueConstraint(columnNames = "name"))
@@ -31,7 +32,7 @@ public class Tag {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", length = 100, nullable = false)
-    private Status status;
+    private VisibleEnum visible;
 
     @ManyToOne
     @JoinColumn(name = "created_user_id", nullable = false)

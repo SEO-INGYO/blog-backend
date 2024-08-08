@@ -6,6 +6,8 @@ import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.Comment;
 
+import com.example.backend.enums.StatusEnum;
+
 @Entity
 @Table(name="post_tag_history")
 @Data
@@ -32,9 +34,9 @@ public class PostTagHistory {
     @Comment("변경 사용자")
     private String changeUser;
 
-    @Column(name = "change_type", length = 100, nullable = false)
-    @Comment("변경 타입")
-    private String changeType;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", length = 100, nullable = false)
+    private StatusEnum status;
 
     @Column(name = "old_data", columnDefinition = "TEXT")
     @Comment("이전 데이터")

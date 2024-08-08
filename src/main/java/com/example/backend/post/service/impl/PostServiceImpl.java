@@ -4,7 +4,8 @@ import com.example.backend.base.dto.BaseResponse;
 import com.example.backend.category.dao.CategoryRepository;
 import com.example.backend.category.dto.CategoryDto;
 import com.example.backend.category.entity.Category;
-import com.example.backend.enums.Status;
+import com.example.backend.enums.StatusEnum;
+import com.example.backend.enums.VisibleEnum;
 import com.example.backend.post.dao.PostHistoryRepository;
 import com.example.backend.post.dao.PostMapper;
 import com.example.backend.post.dao.PostRepository;
@@ -137,7 +138,7 @@ public class PostServiceImpl implements PostService {
             newPost.setTitle(createPostRequest.getTitle());
             newPost.setContent(HTMLUtils.markdownToHtml(createPostRequest.getContent()));
             newPost.setCategory(category);
-            newPost.setStatus(Status.CREATE);
+            newPost.setVisible(VisibleEnum.PUBLISHED);
             newPost.setLastModifyUser(currentUser);
 
             Post savedPost = postRepository.save(newPost);
@@ -147,7 +148,7 @@ public class PostServiceImpl implements PostService {
             postHistory.setPostId(savedPost.getId());
             postHistory.setChangeTime(Timestamp.valueOf(LocalDateTime.now()));
             postHistory.setChangeUser(currentUser);
-            postHistory.setChangeType("CREATE");
+            postHistory.setStatus(StatusEnum.CREATED);
             postHistory.setOldData(""); // 생성이므로 이전 데이터 없음
             Map<String, String> postData = new HashMap<>();
             postData.put("title", savedPost.getTitle());
@@ -190,7 +191,7 @@ public class PostServiceImpl implements PostService {
                 postTagHistory.setTagId(tagEntity.getId());
                 postTagHistory.setChangeTime(LocalDateTime.now());
                 postTagHistory.setChangeUser(currentUser);
-                postTagHistory.setChangeType("ADD");
+                postTagHistory.setStatus(StatusEnum.CREATED);
                 postTagHistory.setOldData(""); // 처음 추가이므로 이전 데이터 없음
                 postTagHistory.setNewData(JsonUtils.convertToJsonString("tagName", tagEntity.getName()));
                 postTagHistoryRepository.save(postTagHistory);
@@ -218,7 +219,7 @@ public class PostServiceImpl implements PostService {
                     .orElseThrow(() -> new RuntimeException("Post not found"));
     
             // 카테고리 조회
-            Category newCategory = categoryRepository.findCategoryByName(updatePostRequest.getCategory());
+            Category newCategory = categoryRepository.findCategoryById(updatePostRequest.getCategory());
             if (newCategory == null) {
                 response.setResultMessage("실패 - 해당 카테고리를 찾을 수 없습니다.");
                 response.setResultCode(00);
@@ -243,7 +244,7 @@ public class PostServiceImpl implements PostService {
             postHistory.setPostId(existingPost.getId());
             postHistory.setChangeTime(Timestamp.valueOf(LocalDateTime.now()));
             postHistory.setChangeUser(currentUser);
-            postHistory.setChangeType("UPDATE");
+            postHistory.setStatus(StatusEnum.UPDATEED);
     
             // 이전 데이터 기록
             Map<String, String> oldData = new HashMap<>();
@@ -300,7 +301,7 @@ public class PostServiceImpl implements PostService {
                 postTagHistory.setTagId(existingPostTag.getTag().getId());
                 postTagHistory.setChangeTime(LocalDateTime.now());
                 postTagHistory.setChangeUser(currentUser);
-                postTagHistory.setChangeType("REMOVE");
+                postTagHistory.setStatus(StatusEnum.DELETEED);
                 postTagHistory.setOldData(JsonUtils.convertToJsonString("tagName", existingPostTag.getTag().getName()));
                 postTagHistory.setNewData(""); // 삭제이므로 새로운 데이터 없음
                 postTagHistoryRepository.save(postTagHistory);
@@ -321,7 +322,7 @@ public class PostServiceImpl implements PostService {
                 postTagHistory.setTagId(tagEntity.getId());
                 postTagHistory.setChangeTime(LocalDateTime.now());
                 postTagHistory.setChangeUser(currentUser);
-                postTagHistory.setChangeType("ADD");
+                postTagHistory.setStatus(StatusEnum.CREATED);
                 postTagHistory.setOldData(""); // 새로 추가된 태그이므로 이전 데이터 없음
                 postTagHistory.setNewData(JsonUtils.convertToJsonString("tagName", tagEntity.getName()));
                 postTagHistoryRepository.save(postTagHistory);
@@ -365,7 +366,7 @@ public class PostServiceImpl implements PostService {
             postHistory.setPostId(post.getId());
             postHistory.setChangeTime(Timestamp.valueOf(LocalDateTime.now()));
             postHistory.setChangeUser(currentUser);
-            postHistory.setChangeType("DELETE");
+            postHistory.setStatus(StatusEnum.DELETEED);
     
             // 이전 데이터 기록
             Map<String, String> oldData = new HashMap<>();
@@ -376,7 +377,7 @@ public class PostServiceImpl implements PostService {
             postHistory.setOldData(JsonUtils.convertToJsonString(oldData));
     
             // 소프트 삭제 처리
-            post.setStatus(Status.DELETE);  // 'DELETE' 상태로 변경
+            post.setVisible(VisibleEnum.UNPUBLISHED);  // 'DELETE' 상태로 변경
             post.setLastModifyUser(currentUser);
             postRepository.save(post);
     
@@ -392,7 +393,7 @@ public class PostServiceImpl implements PostService {
                 postTagHistory.setTagId(postTag.getTag().getId());
                 postTagHistory.setChangeTime(LocalDateTime.now());
                 postTagHistory.setChangeUser(currentUser);
-                postTagHistory.setChangeType("DELETE");
+                postTagHistory.setStatus(StatusEnum.DELETEED);
                 postTagHistory.setOldData(JsonUtils.convertToJsonString("tagName", postTag.getTag().getName()));
                 postTagHistory.setNewData(""); // 삭제된 후의 데이터는 없음
                 postTagHistoryRepository.save(postTagHistory);

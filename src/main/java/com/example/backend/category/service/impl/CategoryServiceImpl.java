@@ -6,9 +6,8 @@ import com.example.backend.category.dto.*;
 import com.example.backend.category.entity.Category;
 import com.example.backend.category.entity.CategoryHistory;
 import com.example.backend.category.service.CategoryService;
-import com.example.backend.enums.Status;
-import com.example.backend.tag.entity.Tag;
-import com.example.backend.tag.entity.TagHistory;
+import com.example.backend.enums.StatusEnum;
+import com.example.backend.enums.VisibleEnum;
 import com.example.backend.user.dao.UserRepository;
 import com.example.backend.user.entity.User;
 import com.example.backend.utils.JsonUtils;
@@ -24,8 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.HashMap;
-import java.util.Map;
+
 import java.time.LocalDateTime;
 
 @Service
@@ -88,7 +86,7 @@ public class CategoryServiceImpl implements CategoryService {
             category.setCreatedTime(LocalDateTime.now());
             category.setLastModifiedUser(author);
             category.setLastModifiedTime(LocalDateTime.now());
-            category.setStatus(Status.CREATE);
+            category.setVisible(VisibleEnum.PUBLISHED);
 
             Category savedCategory = categoryRepository.save(category);
 
@@ -97,7 +95,7 @@ public class CategoryServiceImpl implements CategoryService {
             categoryHistory.setCategoryId(savedCategory.getId());
             categoryHistory.setChangeTime(LocalDateTime.now());
             categoryHistory.setChangeUser(author.getUsername());
-            categoryHistory.setChangeType("CREATE");
+            categoryHistory.setStatus(StatusEnum.CREATED);
             categoryHistory.setOldData(null);
             categoryHistory.setNewData(JsonUtils.convertToJsonString("name", savedCategory.getName()));
 
@@ -154,7 +152,7 @@ public class CategoryServiceImpl implements CategoryService {
             categoryHistory.setCategoryId(category.getId());
             categoryHistory.setChangeTime(LocalDateTime.now());
             categoryHistory.setChangeUser(author.getUsername());
-            categoryHistory.setChangeType("UPDATE");
+            categoryHistory.setStatus(StatusEnum.UPDATEED);
             categoryHistory.setOldData(oldData);
             categoryHistory.setNewData(JsonUtils.convertToJsonString("name", savedCategory.getName()));
 
@@ -203,14 +201,14 @@ public class CategoryServiceImpl implements CategoryService {
             categoryHistory.setCategoryId(category.getId());
             categoryHistory.setChangeTime(LocalDateTime.now());
             categoryHistory.setChangeUser(author.getUsername());
-            categoryHistory.setChangeType("DELETE");
+            categoryHistory.setStatus(StatusEnum.DELETEED);
             categoryHistory.setOldData(JsonUtils.convertToJsonString("name", category.getName())); // 삭제 전 데이터
             categoryHistory.setNewData(null); // 삭제 후 데이터는 null
 
             categoryHistoryRepository.save(categoryHistory);
 
             // 태그 상태 업데이트
-            category.setStatus(Status.DELETE); // 상태를 DELETE로 변경
+            category.setVisible(VisibleEnum.UNPUBLISHED); // 상태를 DELETE로 변경
             category.setLastModifiedUser(author);
             category.setLastModifiedTime(LocalDateTime.now());
 

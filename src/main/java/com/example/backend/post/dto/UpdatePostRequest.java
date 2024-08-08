@@ -13,6 +13,6 @@ public class UpdatePostRequest {
     private Long id;
     private String title;
     private String content;
-    private String category;
+    private Long category;
     private List<String> tags;
 }

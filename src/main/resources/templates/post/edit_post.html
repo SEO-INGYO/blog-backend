@@ -6,7 +6,7 @@
     <form id="editor-form" class="container" th:action="@{/admin/posts/edit/{id}(id=${post.id})}" th:object="${post}" method="post">
         <input type="text" id="title" placeholder="제목" th:field="*{title}" />
 
-        <select id="category" name="category" th:field="*{category.id}">
+        <select id="category" th:field="*{category}">
             <option th:each="category : ${categories}"
                     th:value="${category.id}"
                     th:text="${category.name}"

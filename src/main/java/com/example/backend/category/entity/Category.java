@@ -1,6 +1,6 @@
 package com.example.backend.category.entity;
 
-import com.example.backend.enums.Status;
+import com.example.backend.enums.VisibleEnum;
 import com.example.backend.post.entity.Post;
 import com.example.backend.user.entity.User;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
@@ -28,8 +28,8 @@ public class Category {
     private List<Post> posts = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "status", length = 100, nullable = false)
-    private Status status;
+    @Column(name = "visible", length = 100, nullable = false)
+    private VisibleEnum visible;
 
     @ManyToOne
     @JoinColumn(name = "created_user_id", nullable = false)
