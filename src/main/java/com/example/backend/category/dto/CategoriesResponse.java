@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 public class CategoriesResponse {
     private Long id;
     private String name;
-    private String status;
+    private String visible;
     private String createdUserName;
     private String createdTime;
     private String lastModifiedUserName;

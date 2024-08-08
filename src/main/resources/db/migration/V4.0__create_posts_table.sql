@@ -3,7 +3,7 @@ CREATE TABLE `posts` (
   `content` text DEFAULT NULL,
   `last_modified_user` varchar(100) NOT NULL,
   `title` varchar(255) DEFAULT NULL,
-  `status` enum('PUBLISHED','UNPUBLISHED') NOT NULL,
+  `visible` enum('PUBLISHED','UNPUBLISHED') NOT NULL,
   `category_id` bigint(20) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `FKijnwr3brs8vaosl80jg9rp7uc` (`category_id`),

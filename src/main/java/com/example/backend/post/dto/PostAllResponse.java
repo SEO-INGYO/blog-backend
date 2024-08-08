@@ -12,7 +12,7 @@ public class PostAllResponse {
     private String title;
     private String content;
     private String category;
-    private String status;
+    private String visible;
     private String lastModifiedUser;
     private String tags;
 }

@@ -14,7 +14,7 @@ public class CategoryHistoryAllResponse {
     private long categoryId;
     private LocalDateTime changeTime;
     private String changeUser;
-    private String changeType;
+    private String status;
     private String oldData;
     private String newData;
 }

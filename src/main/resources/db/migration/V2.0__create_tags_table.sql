@@ -3,7 +3,7 @@ CREATE TABLE `tags` (
   `created_time` datetime(6) NOT NULL,
   `last_modified_time` datetime(6) NOT NULL,
   `name` varchar(100) NOT NULL,
-  `status` enum('PUBLISHED','UNPUBLISHED') NOT NULL,
+  `visible` enum('PUBLISHED','UNPUBLISHED') NOT NULL,
   `created_user_id` bigint(20) NOT NULL,
   `last_modified_user_id` bigint(20) NOT NULL,
   PRIMARY KEY (`id`),

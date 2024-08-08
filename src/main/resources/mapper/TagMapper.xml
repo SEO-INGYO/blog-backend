@@ -3,13 +3,13 @@
 
 <mapper namespace="com.example.backend.tag.dao.TagMapper">
     <select id="getAllTags" resultType="com.example.backend.tag.dto.TagsResponse">
-        SELECT t.id, t.name, t.status, 
+        SELECT t.id, t.name, t.visible, 
                t.created_time, u.username AS created_user_name, 
                t.last_modified_time, u2.username AS last_modified_user_name
         FROM tags t
         LEFT JOIN users u ON t.created_user_id = u.id
         LEFT JOIN users u2 ON t.last_modified_user_id = u2.id
-        WHERE t.status != 'DELETE';
+        WHERE t.visible != 'UNPUBLISHED';
     </select>
 
     <select id="getAllTagHistory" resultType="com.example.backend.tag.dto.TagHistoryAllResponse">

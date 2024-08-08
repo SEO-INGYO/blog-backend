@@ -18,7 +18,7 @@
     <tr th:each="tag : ${tagHistory}" th:id="'tag-' + ${tag.id}">
       <td th:text="${tag.tagId}">이력 대상 태그 ID</td>
       <td th:text="${tag.changeTime}">이력 시간</td>
-      <td th:text="${tag.changeType}">이력 타입</td>
+      <td th:text="${tag.status}">이력 타입</td>
       <td th:text="${tag.oldData}">변경 전 데이터</td>
       <td th:text="${tag.newData}">변경 후 데이터</td>
       <td th:text="${tag.changeUser}">이력 행위자</td>

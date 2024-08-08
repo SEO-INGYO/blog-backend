@@ -35,7 +35,7 @@ public class Post {
     private List<PostTag> tags = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "status", length = 100, nullable = false)
+    @Column(name = "visible", length = 100, nullable = false)
     private VisibleEnum visible;
 
     @Column(name = "last_modified_user", length = 100, nullable = false)

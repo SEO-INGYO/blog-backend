@@ -25,7 +25,7 @@
       <tr th:each="category : ${categories}" th:id="'category-' + ${category.id}">
         <td th:text="${category.id}">카테고리 ID</td>
         <td th:text="${category.name}">카테고리 이름</td>
-        <td th:text="${category.status}">카테고리 상태</td>
+        <td th:text="${category.visible}">카테고리 상태</td>
         <td th:text="${category.createdUserName}">카테고리 생성자 이름</td>
         <td th:text="${category.createdTime}">카테고리 생성시간</td>
         <td th:text="${category.lastModifiedUserName}">카테고리 마지막 수정자 이름</td>

@@ -30,7 +30,7 @@ public class Tag {
     private List<PostTag> posts = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "status", length = 100, nullable = false)
+    @Column(name = "visible", length = 100, nullable = false)
     private VisibleEnum visible;
 
     @ManyToOne
