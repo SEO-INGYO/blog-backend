@@ -18,9 +18,8 @@ import com.example.backend.post.entity.PostTagHistory;
 import com.example.backend.post.service.PostService;
 import com.example.backend.tag.dao.TagRepository;
 import com.example.backend.tag.dto.TagDto;
+import com.example.backend.tag.dto.TagNameRequest;
 import com.example.backend.tag.entity.Tag;
-import com.example.backend.user.dao.UserRepository;
-import com.example.backend.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -28,6 +27,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.example.backend.utils.*;
+import com.example.backend.tag.service.*;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -46,6 +46,8 @@ public class PostServiceImpl implements PostService {
     private final PostTagHistoryRepository postTagHistoryRepository;
     private final CategoryRepository categoryRepository;
     private final TagRepository tagRepository;
+    private final TagService tagService;
+
 
     @Override
     @Transactional(readOnly = true)
@@ -146,14 +148,14 @@ public class PostServiceImpl implements PostService {
             postHistory.setChangeTime(Timestamp.valueOf(LocalDateTime.now()));
             postHistory.setChangeUser(currentUser);
             postHistory.setChangeType("CREATE");
-            postHistory.setOldPost(""); // 생성이므로 이전 데이터 없음
+            postHistory.setOldData(""); // 생성이므로 이전 데이터 없음
             Map<String, String> postData = new HashMap<>();
             postData.put("title", savedPost.getTitle());
             List<PostTag> associatedPostTags = savedPost.getTags();
             String associatedTagNames = StringUtils.joinTagNamesWithComma(associatedPostTags);
             postData.put("tag", associatedTagNames);
             postData.put("content", savedPost.getContent());
-            postHistory.setNewPost(JsonUtils.convertToJsonString(postData));
+            postHistory.setNewData(JsonUtils.convertToJsonString(postData));
             postHistoryRepository.save(postHistory);
 
             List<String> tagNamesList = createPostRequest.getTags();
@@ -168,8 +170,9 @@ public class PostServiceImpl implements PostService {
         
                 if (tagEntity == null) {
                     tagEntity = new Tag();
-                    tagEntity.setName(tagName);
-                    tagRepository.save(tagEntity);
+                    TagNameRequest tagNameRequest = new TagNameRequest();
+                    tagNameRequest.setName(tagName);
+                    tagEntity = tagService.createTagResponse(tagNameRequest);
                 }
                 finalTagList.add(tagEntity);
             }
@@ -248,7 +251,7 @@ public class PostServiceImpl implements PostService {
             oldData.put("content", existingPost.getContent());
             String oldTagNames = StringUtils.joinTagNamesWithComma(existingPost.getTags());
             oldData.put("tag", oldTagNames);
-            postHistory.setOldPost(JsonUtils.convertToJsonString(oldData));
+            postHistory.setOldData(JsonUtils.convertToJsonString(oldData));
     
             // Post 업데이트
             existingPost.setTitle(updatePostRequest.getTitle());
@@ -264,7 +267,7 @@ public class PostServiceImpl implements PostService {
             newData.put("content", updatedPost.getContent());
             String newTagNames = StringUtils.joinTagNamesWithComma(updatedPost.getTags());
             newData.put("tag", newTagNames);
-            postHistory.setNewPost(JsonUtils.convertToJsonString(newData));
+            postHistory.setNewData(JsonUtils.convertToJsonString(newData));
     
             // 히스토리 저장
             postHistoryRepository.save(postHistory);
@@ -282,8 +285,9 @@ public class PostServiceImpl implements PostService {
     
                 if (tagEntity == null) {
                     tagEntity = new Tag();
-                    tagEntity.setName(tagName);
-                    tagRepository.save(tagEntity);
+                    TagNameRequest tagNameRequest = new TagNameRequest();
+                    tagNameRequest.setName(tagName);
+                    tagEntity = tagService.createTagResponse(tagNameRequest);
                 }
                 finalTags.add(tagEntity);
             }
@@ -369,7 +373,7 @@ public class PostServiceImpl implements PostService {
             oldData.put("content", post.getContent());
             String oldTagNames = StringUtils.joinTagNamesWithComma(post.getTags());
             oldData.put("tag", oldTagNames);
-            postHistory.setOldPost(JsonUtils.convertToJsonString(oldData));
+            postHistory.setOldData(JsonUtils.convertToJsonString(oldData));
     
             // 소프트 삭제 처리
             post.setStatus(Status.DELETE);  // 'DELETE' 상태로 변경
@@ -377,7 +381,7 @@ public class PostServiceImpl implements PostService {
             postRepository.save(post);
     
             // 새로운 데이터는 소프트 삭제 후에는 없으므로 빈 데이터로 설정
-            postHistory.setNewPost(""); // 삭제 후에는 새로운 데이터가 없음
+            postHistory.setNewData(""); // 삭제 후에는 새로운 데이터가 없음
             postHistoryRepository.save(postHistory);
     
             // 기존 PostTag의 히스토리 기록 (PostTagHistory)

@@ -15,6 +15,6 @@ public class PostHistoryResponse {
     private Timestamp changeTime;
     private String changeUser;
     private String changeType;
-    private String oldPost;
-    private String newPost;
+    private String oldData;
+    private String newData;
 }

@@ -30,7 +30,7 @@
                 <td th:text="${post.category}">카테고리</td>
                 <td th:text="${post.tags}">태그</td>
                 <td th:text="${post.status}">게시글 상태</td>
-                <td th:text="${post.lastModifyUser}">마지막 수정자</td>
+                <td th:text="${post.lastModifiedUser}">마지막 수정자</td>
                 <td>
                     <div class="btn-group">
                         <a th:href="@{/admin/posts/edit/{id}(id=${post.id})}">수정</a>

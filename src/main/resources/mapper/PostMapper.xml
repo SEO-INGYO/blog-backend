@@ -14,7 +14,7 @@
     </select>
 
     <select id="getPostAllHistory" resultType="com.example.backend.post.dto.PostHistoryResponse">
-        SELECT id, post_id, change_time, change_user, change_type, old_content, new_content
+        SELECT id, post_id, change_time, change_user, change_type, old_data, new_data
         FROM post_history
         ORDER BY change_time DESC
     </select>

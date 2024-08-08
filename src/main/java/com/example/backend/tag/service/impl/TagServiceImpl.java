@@ -261,4 +261,47 @@ public class TagServiceImpl implements TagService {
         }
         return baseResponse;
     }
+
+    @Override
+    @Transactional
+    public Tag createTagResponse(TagNameRequest tagNameRequest){
+        try {
+            // 인증 정보에서 사용자 이름 가져오기
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            String username = null;
+            if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
+                username = ((UserDetails) authentication.getPrincipal()).getUsername();
+            }
+
+            // 사용자 정보 조회
+            User author = userRepository.findByUsername(username);
+
+            // Tag 엔티티 생성 및 저장
+            Tag tag = new Tag();
+            tag.setName(tagNameRequest.getName());
+            tag.setCreatedUser(author);
+            tag.setCreatedTime(LocalDateTime.now());
+            tag.setLastModifiedUser(author);
+            tag.setLastModifiedTime(LocalDateTime.now());
+            tag.setStatus(Status.CREATE);
+
+            Tag savedTag = tagRepository.save(tag);
+
+            // TagHistory 엔티티 생성 및 저장
+            TagHistory tagHistory = new TagHistory();
+            tagHistory.setTagId(savedTag.getId());
+            tagHistory.setChangeTime(LocalDateTime.now());
+            tagHistory.setChangeUser(author.getUsername());
+            tagHistory.setChangeType("CREATE");
+            tagHistory.setOldData(null);
+            tagHistory.setNewData(JsonUtils.convertToJsonString("name", savedTag.getName()));
+
+            tagHistoryRepository.save(tagHistory);
+
+            return savedTag;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 }

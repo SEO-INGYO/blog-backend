@@ -32,11 +32,11 @@ public class PostHistory {
     @Comment("변경 타입")
     private String changeType;
 
-    @Column(name = "old_content", columnDefinition = "TEXT")
+    @Column(name = "old_data", columnDefinition = "TEXT")
     @Comment("이전 Post 내용 (JSON 형식)")
-    private String oldPost;
+    private String oldData;
 
-    @Column(name = "new_content", columnDefinition = "TEXT")
+    @Column(name = "new_data", columnDefinition = "TEXT")
     @Comment("새 Post 내용 (JSON 형식)")
-    private String newPost;
+    private String newData;
 }
