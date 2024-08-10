@@ -88,7 +88,7 @@ const editorConfig = {
             '|',
             'accessibilityHelp'
         ],
-        shouldNotGroupWhenFull: false
+        shouldNotGroupWhenFull: true
     },
     plugins: [
         AccessibilityHelp,
