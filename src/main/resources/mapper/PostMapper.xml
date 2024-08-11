@@ -40,9 +40,9 @@
         p.id,
         p.title,
         p.content,
-        c.name AS categoryName,
+        c.name AS category,
         p.visible,
-        p.last_modified_user_id AS last_modified_user,
+        p.created_time,
         GROUP_CONCAT(t.name SEPARATOR ', ') AS tags
     FROM
         posts p
