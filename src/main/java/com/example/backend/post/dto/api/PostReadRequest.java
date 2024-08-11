@@ -13,4 +13,5 @@ public class PostReadRequest {
     private String category;
     private List<String> tag;
     private Integer limit;
+    private String sortType; // 정렬 타입 추가 ("latest", "oldest", "none")
 }
