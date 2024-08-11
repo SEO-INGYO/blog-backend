@@ -3,8 +3,14 @@
 
 <mapper namespace="com.example.backend.post.dao.PostMapper">
     <select id="getAllPosts" resultType="com.example.backend.post.dto.PostAllResponse">
-        SELECT p.id, p.title, p.content, c.name AS category, p.visible, p.last_modified_user, 
-               GROUP_CONCAT(t.name ORDER BY t.name SEPARATOR ',') AS tags
+        SELECT 
+            p.id, 
+            p.title, 
+            p.content, 
+            c.name AS category, 
+            p.visible, 
+            p.last_modified_user, 
+            GROUP_CONCAT(t.name ORDER BY t.name SEPARATOR ',') AS tags
         FROM posts p
         LEFT JOIN categories c ON p.category_id = c.id
         LEFT JOIN post_tag pt ON p.id = pt.post_id
@@ -14,11 +20,50 @@
     </select>
 
     <select id="getPostAllHistory" resultType="com.example.backend.post.dto.PostHistoryResponse">
-        SELECT id, post_id, change_time, change_user, change_type, old_data, new_data
+        SELECT 
+            id, 
+            post_id, 
+            change_time, 
+            change_user, 
+            change_type, 
+            old_data, 
+            new_data
         FROM post_history
         ORDER BY change_time DESC
     </select>
 
-    <select id="getPostsByCategory" parameterType="String" resultType="com.example.backend.post.dto.PostAllResponse">
+    <select id="getPosts" parameterType="com.example.backend.post.dto.api.PostReadRequest" resultType="com.example.backend.post.dto.PostAllResponse">
+        SELECT
+            p.id,
+            p.title,
+            p.content,
+            c.name AS categoryName,
+            p.visible,
+            p.last_modified_user,
+            GROUP_CONCAT(t.name SEPARATOR ', ') AS tags
+        FROM
+            posts p
+        LEFT JOIN
+            categories c ON p.category_id = c.id
+        LEFT JOIN
+            post_tag pt ON p.id = pt.post_id
+        LEFT JOIN
+            tags t ON pt.tag_id = t.id
+        <where>
+            <if test="category != null">
+                AND c.name = #{category}
+            </if>
+            <if test="tag != null and tag.size > 0">
+                AND t.name IN
+                <foreach collection="tag" item="tagName" open="(" separator="," close=")">
+                    #{tagName}
+                </foreach>
+            </if>
+        </where>
+        GROUP BY p.id
+        <if test="limit != null">
+            LIMIT #{limit}
+        </if>
     </select>
+
 </mapper>

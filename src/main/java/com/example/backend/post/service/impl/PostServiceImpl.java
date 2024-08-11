@@ -12,6 +12,7 @@ import com.example.backend.post.dao.PostRepository;
 import com.example.backend.post.dao.PostTagHistoryRepository;
 import com.example.backend.post.dao.PostTagRepository;
 import com.example.backend.post.dto.*;
+import com.example.backend.post.dto.api.PostReadRequest;
 import com.example.backend.post.entity.Post;
 import com.example.backend.post.entity.PostHistory;
 import com.example.backend.post.entity.PostTag;
@@ -22,6 +23,8 @@ import com.example.backend.tag.dto.TagDto;
 import com.example.backend.tag.dto.TagNameRequest;
 import com.example.backend.tag.entity.Tag;
 import lombok.RequiredArgsConstructor;
+
+import org.apache.catalina.connector.Request;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -67,8 +70,8 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<PostAllResponse> getPostsByCategory(String category) {
-        List<PostAllResponse> posts = postMapper.getPostsByCategory(category);
+    public List<PostAllResponse> getPosts(PostReadRequest request) {
+        List<PostAllResponse> posts = postMapper.getPosts(request);
         for (PostAllResponse post : posts) {
             String content = post.getContent();
             if (content == null) {

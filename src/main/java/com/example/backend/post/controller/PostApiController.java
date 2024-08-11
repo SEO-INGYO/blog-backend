@@ -2,6 +2,7 @@ package com.example.backend.post.controller;
 
 import com.example.backend.post.dto.PostAllResponse;
 import com.example.backend.post.dto.PostDto;
+import com.example.backend.post.dto.api.PostReadRequest;
 import com.example.backend.post.service.PostService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -24,19 +25,9 @@ public class PostApiController {
     @Tag(name="전체 게시글 조회")
     @Operation(summary = "Read", description = "전체 게시글을 조회합니다.")
     @GetMapping("")
-    public ResponseEntity<List<PostAllResponse>> getAllPosts() {
-        List<PostAllResponse> posts = postService.getAllPosts();
-        if (posts.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
-        return new ResponseEntity<>(posts, HttpStatus.OK);
-    }
+    public ResponseEntity<List<PostAllResponse>> getPosts(PostReadRequest request) {
+        List<PostAllResponse> posts = postService.getPosts(request);
 
-    @Tag(name="특정 카테고리 게시글 조회")
-    @Operation(summary = "Read", description = "특정 카테고리 게시글을 조회합니다.")
-    @GetMapping("/category/{category}")
-    public ResponseEntity<List<PostAllResponse>> getPostsByCategory(@PathVariable String category) {
-        List<PostAllResponse> posts = postService.getPostsByCategory(category);
         if (posts.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
@@ -44,7 +35,7 @@ public class PostApiController {
     }
 
     @Tag(name="특정 게시글 조회")
-    @Operation(summary = "Read", description = "전체 게시글을 조회합니다.")
+    @Operation(summary = "Read", description = "특정 게시글을 조회합니다.")
     @GetMapping("/{id}")
     public ResponseEntity<PostDto> getPost(@PathVariable Long id) {
         PostDto post = postService.getPost(id);
