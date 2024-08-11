@@ -42,7 +42,7 @@
         p.content,
         c.name AS categoryName,
         p.visible,
-        p.last_modified_user,
+        p.last_modified_user_id AS last_modified_user,
         GROUP_CONCAT(t.name SEPARATOR ', ') AS tags
     FROM
         posts p

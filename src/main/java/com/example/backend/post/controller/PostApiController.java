@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,7 +26,7 @@ public class PostApiController {
     @Tag(name="전체 게시글 조회")
     @Operation(summary = "Read", description = "전체 게시글을 조회합니다.")
     @GetMapping("")
-    public ResponseEntity<List<PostAllResponse>> getPosts(PostReadRequest request) {
+    public ResponseEntity<List<PostAllResponse>> getPosts(@ModelAttribute PostReadRequest request) {
         List<PostAllResponse> posts = postService.getPosts(request);
 
         if (posts.isEmpty()) {
