@@ -8,15 +8,18 @@
             p.title, 
             p.content, 
             c.name AS category, 
-            p.visible, 
-            p.last_modified_user, 
+            p.visible,
+            p.created_user_id AS created_user,
+            p.created_time,
+            p.last_modified_user_id AS last_modified_user,
+            p.last_modified_time,
             GROUP_CONCAT(t.name ORDER BY t.name SEPARATOR ',') AS tags
         FROM posts p
         LEFT JOIN categories c ON p.category_id = c.id
         LEFT JOIN post_tag pt ON p.id = pt.post_id
         LEFT JOIN tags t ON pt.tag_id = t.id
         WHERE p.visible != 'UNPUBLISHED'
-        GROUP BY p.id, p.title, p.content, c.name, p.visible, p.last_modified_user
+        GROUP BY p.id, p.title, p.content, c.name, p.visible, p.created_user_id, p.created_time, p.last_modified_user_id, p.last_modified_time
     </select>
 
     <select id="getPostAllHistory" resultType="com.example.backend.post.dto.PostHistoryResponse">
@@ -63,10 +66,10 @@
     GROUP BY p.id
     <choose>
         <when test="sortType == 'latest'">
-            ORDER BY p.created_at DESC
+            ORDER BY p.created_time DESC
         </when>
         <when test="sortType == 'oldest'">
-            ORDER BY p.created_at ASC
+            ORDER BY p.created_time ASC
         </when>
         <otherwise>
             <!-- 정렬하지 않음 -->

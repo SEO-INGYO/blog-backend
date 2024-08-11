@@ -13,6 +13,9 @@ public class PostAllResponse {
     private String content;
     private String category;
     private String visible;
+    private String createdUser;
+    private String createdTime;
     private String lastModifiedUser;
+    private String lastModifiedTime;
     private String tags;
 }

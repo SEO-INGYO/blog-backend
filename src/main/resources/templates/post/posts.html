@@ -16,7 +16,10 @@
                 <th scope="col">카테고리</th>
                 <th scope="col">태그</th>
                 <th scope="col">게시글 상태</th>
+                <th scope="col">작성자</th>
+                <th scope="col">작성시간</th>
                 <th scope="col">마지막 수정자</th>
+                <th scope="col">마지막 수정시간</th>
                 <th scope="col">관리</th>
             </tr>
             </thead>
@@ -30,7 +33,10 @@
                 <td th:text="${post.category}">카테고리</td>
                 <td th:text="${post.tags}">태그</td>
                 <td th:text="${post.visible}">게시글 상태</td>
+                <td th:text="${post.createdUser}">작성자</td>
+                <td th:text="${post.createdTime}">작성시간</td>
                 <td th:text="${post.lastModifiedUser}">마지막 수정자</td>
+                <td th:text="${post.lastModifiedTime}">마지막 수정시간</td>
                 <td>
                     <div class="btn-group">
                         <a th:href="@{/admin/posts/edit/{id}(id=${post.id})}">수정</a>
