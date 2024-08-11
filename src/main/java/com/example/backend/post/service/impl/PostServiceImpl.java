@@ -24,7 +24,6 @@ import com.example.backend.tag.dto.TagNameRequest;
 import com.example.backend.tag.entity.Tag;
 import lombok.RequiredArgsConstructor;
 
-import org.apache.catalina.connector.Request;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
