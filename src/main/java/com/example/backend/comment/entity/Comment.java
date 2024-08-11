@@ -1,7 +1,11 @@
 package com.example.backend.comment.entity;
 
+import java.time.LocalDateTime;
+
 import com.example.backend.enums.VisibleEnum;
 import com.example.backend.post.entity.Post;
+import com.example.backend.user.entity.User;
+
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -24,6 +28,17 @@ public class Comment {
     @Column(name = "visible", length = 100, nullable = false)
     private VisibleEnum visible;
 
-    @Column(name = "last_modified_user", length = 100, nullable = false)
-    private String lastModifyUser;
+    @ManyToOne
+    @JoinColumn(name = "created_user_id", nullable = false)
+    private User createdUser;
+
+    @Column(name = "created_time", nullable = false)
+    private LocalDateTime createdTime;
+
+    @ManyToOne
+    @JoinColumn(name = "last_modified_user_id", nullable = false)
+    private User lastModifiedUser;
+
+    @Column(name = "last_modified_time", nullable = false)
+    private LocalDateTime lastModifiedTime;
 }

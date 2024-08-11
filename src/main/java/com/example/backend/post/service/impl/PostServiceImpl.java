@@ -31,6 +31,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.example.backend.utils.*;
 import com.example.backend.tag.service.*;
+import com.example.backend.user.dao.UserRepository;
+import com.example.backend.user.entity.User;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -50,6 +52,7 @@ public class PostServiceImpl implements PostService {
     private final CategoryRepository categoryRepository;
     private final TagRepository tagRepository;
     private final TagService tagService;
+    private final UserRepository userRepository;
 
 
     @Override
@@ -118,22 +121,28 @@ public class PostServiceImpl implements PostService {
     @Override
     @Transactional
     public BaseResponse createPost(CreatePostRequest createPostRequest, String tags){
-        BaseResponse baseResponse = new BaseResponse();
+        BaseResponse response = new BaseResponse();
         try {
             Category category = categoryRepository.findById(createPostRequest.getCategory())
                     .orElseThrow(() -> new RuntimeException("Category not found"));
 
-            // 인증 정보에서 사용자 이름 가져오기
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            String currentUser = null;
+            String username = null;
             if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
-                currentUser = ((UserDetails) authentication.getPrincipal()).getUsername();
+                username = ((UserDetails) authentication.getPrincipal()).getUsername();
             }
 
+            if (username == null) {
+                response.setResultMessage("실패 - 작성 시 인증이 필요합니다.");
+                response.setResultCode(00);
+                return response;
+            }
+
+            User currentUser = userRepository.findByUsername(username);
             if (currentUser == null) {
-                baseResponse.setResultMessage("실패 - 작성 시 인증이 필요합니다.");
-                baseResponse.setResultCode(00);
-                return baseResponse;
+                response.setResultMessage("실패 - 작성자를 찾을 수 없습니다.");
+                response.setResultCode(00);
+                return response;
             }
 
             Post newPost = new Post();
@@ -141,7 +150,10 @@ public class PostServiceImpl implements PostService {
             newPost.setContent(HTMLUtils.markdownToHtml(createPostRequest.getContent()));
             newPost.setCategory(category);
             newPost.setVisible(VisibleEnum.PUBLISHED);
-            newPost.setLastModifyUser(currentUser);
+            newPost.setCreatedUser(currentUser);
+            newPost.setCreatedTime(LocalDateTime.now());
+            newPost.setLastModifiedUser(currentUser);
+            newPost.setLastModifiedTime(LocalDateTime.now());
 
             Post savedPost = postRepository.save(newPost);
 
@@ -149,7 +161,7 @@ public class PostServiceImpl implements PostService {
             PostHistory postHistory = new PostHistory();
             postHistory.setPostId(savedPost.getId());
             postHistory.setChangeTime(Timestamp.valueOf(LocalDateTime.now()));
-            postHistory.setChangeUser(currentUser);
+            postHistory.setChangeUser(currentUser.getUsername());
             postHistory.setStatus(StatusEnum.CREATED);
             postHistory.setOldData(""); // 생성이므로 이전 데이터 없음
             Map<String, String> postData = new HashMap<>();
@@ -192,7 +204,7 @@ public class PostServiceImpl implements PostService {
                 postTagHistory.setPostId(savedPost.getId());
                 postTagHistory.setTagId(tagEntity.getId());
                 postTagHistory.setChangeTime(LocalDateTime.now());
-                postTagHistory.setChangeUser(currentUser);
+                postTagHistory.setChangeUser(currentUser.getUsername());
                 postTagHistory.setStatus(StatusEnum.CREATED);
                 postTagHistory.setOldData(""); // 처음 추가이므로 이전 데이터 없음
                 postTagHistory.setNewData(JsonUtils.convertToJsonString("tagName", tagEntity.getName()));
@@ -200,14 +212,14 @@ public class PostServiceImpl implements PostService {
             }
             postTagRepository.saveAll(postTagList);
 
-            baseResponse.setResultMessage("성공");
-            baseResponse.setResultCode(01);
-            return baseResponse;
+            response.setResultMessage("성공");
+            response.setResultCode(01);
+            return response;
         } catch (Exception e) {
             e.printStackTrace();
-            baseResponse.setResultMessage("실패");
-            baseResponse.setResultCode(00);
-            return baseResponse;
+            response.setResultMessage("실패");
+            response.setResultCode(00);
+            return response;
         }
     }
 
@@ -228,24 +240,30 @@ public class PostServiceImpl implements PostService {
                 return response;
             }
     
-            // 인증 정보에서 사용자 이름 가져오기
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            String currentUser = null;
+            String username = null;
             if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
-                currentUser = ((UserDetails) authentication.getPrincipal()).getUsername();
+                username = ((UserDetails) authentication.getPrincipal()).getUsername();
             }
-    
-            if (currentUser == null) {
+
+            if (username == null) {
                 response.setResultMessage("실패 - 작성 시 인증이 필요합니다.");
                 response.setResultCode(00);
                 return response;
             }
-    
+
+            User currentUser = userRepository.findByUsername(username);
+            if (currentUser == null) {
+                response.setResultMessage("실패 - 작성자를 찾을 수 없습니다.");
+                response.setResultCode(00);
+                return response;
+            }
+
             // 기존 데이터 백업 (히스토리 기록용)
             PostHistory postHistory = new PostHistory();
             postHistory.setPostId(existingPost.getId());
             postHistory.setChangeTime(Timestamp.valueOf(LocalDateTime.now()));
-            postHistory.setChangeUser(currentUser);
+            postHistory.setChangeUser(currentUser.getUsername());
             postHistory.setStatus(StatusEnum.UPDATEED);
     
             // 이전 데이터 기록
@@ -260,7 +278,8 @@ public class PostServiceImpl implements PostService {
             existingPost.setTitle(updatePostRequest.getTitle());
             existingPost.setContent(HTMLUtils.markdownToHtml(updatePostRequest.getContent()));
             existingPost.setCategory(newCategory);
-            existingPost.setLastModifyUser(currentUser);
+            existingPost.setLastModifiedUser(currentUser);
+            existingPost.setLastModifiedTime(LocalDateTime.now());
     
             Post updatedPost = postRepository.save(existingPost);
     
@@ -302,7 +321,7 @@ public class PostServiceImpl implements PostService {
                 postTagHistory.setPostId(updatedPost.getId());
                 postTagHistory.setTagId(existingPostTag.getTag().getId());
                 postTagHistory.setChangeTime(LocalDateTime.now());
-                postTagHistory.setChangeUser(currentUser);
+                postTagHistory.setChangeUser(currentUser.getUsername());
                 postTagHistory.setStatus(StatusEnum.DELETEED);
                 postTagHistory.setOldData(JsonUtils.convertToJsonString("tagName", existingPostTag.getTag().getName()));
                 postTagHistory.setNewData(""); // 삭제이므로 새로운 데이터 없음
@@ -323,7 +342,7 @@ public class PostServiceImpl implements PostService {
                 postTagHistory.setPostId(updatedPost.getId());
                 postTagHistory.setTagId(tagEntity.getId());
                 postTagHistory.setChangeTime(LocalDateTime.now());
-                postTagHistory.setChangeUser(currentUser);
+                postTagHistory.setChangeUser(currentUser.getUsername());
                 postTagHistory.setStatus(StatusEnum.CREATED);
                 postTagHistory.setOldData(""); // 새로 추가된 태그이므로 이전 데이터 없음
                 postTagHistory.setNewData(JsonUtils.convertToJsonString("tagName", tagEntity.getName()));
@@ -350,15 +369,21 @@ public class PostServiceImpl implements PostService {
             Post post = postRepository.findById(deletePostRequest.getId())
                     .orElseThrow(() -> new RuntimeException("Post not found"));
     
-            // 인증 정보에서 사용자 이름 가져오기
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            String currentUser = null;
+            String username = null;
             if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
-                currentUser = ((UserDetails) authentication.getPrincipal()).getUsername();
+                username = ((UserDetails) authentication.getPrincipal()).getUsername();
             }
-    
+
+            if (username == null) {
+                response.setResultMessage("실패 - 작성 시 인증이 필요합니다.");
+                response.setResultCode(00);
+                return response;
+            }
+
+            User currentUser = userRepository.findByUsername(username);
             if (currentUser == null) {
-                response.setResultMessage("실패 - 삭제 시 인증이 필요합니다.");
+                response.setResultMessage("실패 - 작성자를 찾을 수 없습니다.");
                 response.setResultCode(00);
                 return response;
             }
@@ -367,7 +392,7 @@ public class PostServiceImpl implements PostService {
             PostHistory postHistory = new PostHistory();
             postHistory.setPostId(post.getId());
             postHistory.setChangeTime(Timestamp.valueOf(LocalDateTime.now()));
-            postHistory.setChangeUser(currentUser);
+            postHistory.setChangeUser(currentUser.getUsername());
             postHistory.setStatus(StatusEnum.DELETEED);
     
             // 이전 데이터 기록
@@ -379,8 +404,9 @@ public class PostServiceImpl implements PostService {
             postHistory.setOldData(JsonUtils.convertToJsonString(oldData));
     
             // 소프트 삭제 처리
-            post.setVisible(VisibleEnum.UNPUBLISHED);  // 'DELETE' 상태로 변경
-            post.setLastModifyUser(currentUser);
+            post.setVisible(VisibleEnum.UNPUBLISHED);  // 'UNPUBLISHED' 상태로 변경
+            post.setLastModifiedUser(currentUser);
+            post.setLastModifiedTime(LocalDateTime.now());
             postRepository.save(post);
     
             // 새로운 데이터는 소프트 삭제 후에는 없으므로 빈 데이터로 설정
@@ -394,7 +420,7 @@ public class PostServiceImpl implements PostService {
                 postTagHistory.setPostId(post.getId());
                 postTagHistory.setTagId(postTag.getTag().getId());
                 postTagHistory.setChangeTime(LocalDateTime.now());
-                postTagHistory.setChangeUser(currentUser);
+                postTagHistory.setChangeUser(currentUser.getUsername());
                 postTagHistory.setStatus(StatusEnum.DELETEED);
                 postTagHistory.setOldData(JsonUtils.convertToJsonString("tagName", postTag.getTag().getName()));
                 postTagHistory.setNewData(""); // 삭제된 후의 데이터는 없음
