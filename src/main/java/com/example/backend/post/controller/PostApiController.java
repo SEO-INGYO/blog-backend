@@ -21,12 +21,12 @@ import java.util.List;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/posts")
+@CrossOrigin(origins = "https://blog.rocd.site")
 public class PostApiController {
     private final PostService postService;
 
     @Tag(name="전체 게시글 조회")
     @Operation(summary = "Read", description = "전체 게시글을 조회합니다.")
-    @CrossOrigin(origins = "https://blog.rocd.site")
     @GetMapping("")
     public ResponseEntity<List<PostAllResponse>> getPosts(@ModelAttribute PostReadRequest request) {
         List<PostAllResponse> posts = postService.getPosts(request);
@@ -39,7 +39,6 @@ public class PostApiController {
 
     @Tag(name="특정 게시글 조회")
     @Operation(summary = "Read", description = "특정 게시글을 조회합니다.")
-    @CrossOrigin(origins = "https://blog.rocd.site")
     @GetMapping("/{id}")
     public ResponseEntity<PostDto> getPost(@PathVariable Long id) {
         PostDto post = postService.getPost(id);
