@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,6 +26,7 @@ public class PostApiController {
 
     @Tag(name="전체 게시글 조회")
     @Operation(summary = "Read", description = "전체 게시글을 조회합니다.")
+    @CrossOrigin(origins = "http://localhost:3000")
     @GetMapping("")
     public ResponseEntity<List<PostAllResponse>> getPosts(@ModelAttribute PostReadRequest request) {
         List<PostAllResponse> posts = postService.getPosts(request);
@@ -37,6 +39,7 @@ public class PostApiController {
 
     @Tag(name="특정 게시글 조회")
     @Operation(summary = "Read", description = "특정 게시글을 조회합니다.")
+    @CrossOrigin(origins = "http://localhost:3000")
     @GetMapping("/{id}")
     public ResponseEntity<PostDto> getPost(@PathVariable Long id) {
         PostDto post = postService.getPost(id);
