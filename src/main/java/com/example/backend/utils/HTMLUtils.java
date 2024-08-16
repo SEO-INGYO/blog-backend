@@ -2,10 +2,11 @@ package com.example.backend.utils;
 
 import com.vladsch.flexmark.html.HtmlRenderer;
 import com.vladsch.flexmark.parser.Parser;
-import com.vladsch.flexmark.util.ast.Node;
-import com.vladsch.flexmark.util.data.MutableDataSet;
 
 public final class HTMLUtils {
+    private static final Parser PARSER = Parser.builder().build();
+    private static final HtmlRenderer RENDERER = HtmlRenderer.builder().build();
+
     private HTMLUtils() {
         throw new UnsupportedOperationException("Utility class");
     }
@@ -18,12 +19,7 @@ public final class HTMLUtils {
         return org.apache.commons.text.StringEscapeUtils.escapeHtml4(content);
     }
 
-    public static String markdownToHtml(String markdown) {
-        MutableDataSet options = new MutableDataSet();
-        Parser parser = Parser.builder(options).build();
-        HtmlRenderer renderer = HtmlRenderer.builder(options).build();
-
-        Node document = parser.parse(markdown);
-        return renderer.render(document);  // HTML로 변환된 문자열을 반환
+    public static String convertMarkdownToHtml(String markdown) {
+        return RENDERER.render(PARSER.parse(markdown));
     }
 }

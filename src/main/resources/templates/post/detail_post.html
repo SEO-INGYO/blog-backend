@@ -7,10 +7,4 @@
             <a th:href="@{/admin/posts}">목록으로 돌아가기</a>
         </div>
     </main>
-    <script>
-        const converter = new showdown.Converter();
-        const postContent = document.getElementById('post-content');
-        postContent.innerHTML = converter.makeHtml(postContent.textContent);
-        hljs.highlightAll();
-    </script>
 </html>

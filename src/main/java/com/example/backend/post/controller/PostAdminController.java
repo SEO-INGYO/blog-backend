@@ -9,6 +9,8 @@ import com.example.backend.post.dto.PostDto;
 import com.example.backend.post.dto.UpdatePostRequest;
 import com.example.backend.post.entity.Post;
 import com.example.backend.post.service.PostService;
+import com.example.backend.utils.HTMLUtils;
+
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -85,10 +87,7 @@ public class PostAdminController {
     public String editPost(@PathVariable Long id, @ModelAttribute("post") UpdatePostRequest updatePostRequest, Model model) {
         try {
             updatePostRequest.setId(id);
-            System.out.println(updatePostRequest);
             BaseResponse baseResponse = postService.updatePost(updatePostRequest);
-            System.out.println(baseResponse);
-            System.out.println("---------------------결과-------------------------");
             model.addAttribute("response", baseResponse);
         } catch (Exception e) {
             e.printStackTrace();

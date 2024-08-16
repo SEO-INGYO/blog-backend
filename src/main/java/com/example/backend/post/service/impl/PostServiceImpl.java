@@ -39,8 +39,6 @@ import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.example.backend.utils.HTMLUtils.stripHtmlTags;
-
 @Service
 @RequiredArgsConstructor
 public class PostServiceImpl implements PostService {
@@ -64,7 +62,7 @@ public class PostServiceImpl implements PostService {
             if (content == null) {
                 post.setContent("");
             } else {
-                post.setContent(stripHtmlTags(post.getContent()));
+                post.setContent(post.getContent());
             }
         }
         return posts;
@@ -79,7 +77,7 @@ public class PostServiceImpl implements PostService {
             if (content == null) {
                 post.setContent("");
             } else {
-                post.setContent(stripHtmlTags(post.getContent()));
+                post.setContent(post.getContent());
             }
         }
         return posts;
@@ -147,7 +145,7 @@ public class PostServiceImpl implements PostService {
 
             Post newPost = new Post();
             newPost.setTitle(createPostRequest.getTitle());
-            newPost.setContent(HTMLUtils.markdownToHtml(createPostRequest.getContent()));
+            newPost.setContent(createPostRequest.getContent());
             newPost.setCategory(category);
             newPost.setVisible(VisibleEnum.PUBLISHED);
             newPost.setCreatedUser(currentUser);
@@ -276,7 +274,7 @@ public class PostServiceImpl implements PostService {
     
             // Post 업데이트
             existingPost.setTitle(updatePostRequest.getTitle());
-            existingPost.setContent(HTMLUtils.markdownToHtml(updatePostRequest.getContent()));
+            existingPost.setContent(updatePostRequest.getContent());
             existingPost.setCategory(newCategory);
             existingPost.setLastModifiedUser(currentUser);
             existingPost.setLastModifiedTime(LocalDateTime.now());
