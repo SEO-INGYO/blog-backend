@@ -9,7 +9,6 @@ import com.example.backend.post.dto.PostDto;
 import com.example.backend.post.dto.UpdatePostRequest;
 import com.example.backend.post.entity.Post;
 import com.example.backend.post.service.PostService;
-import com.example.backend.utils.HTMLUtils;
 
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpServletRequest;
