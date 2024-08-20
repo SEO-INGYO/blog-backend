@@ -98,7 +98,7 @@
     LEFT JOIN
         tags t ON pt.tag_id = t.id
     <where>
-        visible = "PUBLISHED"
+        p.visible = "PUBLISHED"
         <if test="category != null">
             AND c.name = #{category}
         </if>
