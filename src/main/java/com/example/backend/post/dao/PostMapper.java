@@ -16,5 +16,7 @@ public interface PostMapper {
 
     List<PostAllResponse> getPosts(PostReadRequest request);
 
+    List<PostAllResponse> getPublishedPosts(PostReadRequest request);
+
     List<PostHistoryResponse> getPostAllHistory();
 }

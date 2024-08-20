@@ -85,6 +85,21 @@ public class PostServiceImpl implements PostService {
 
     @Override
     @Transactional(readOnly = true)
+    public List<PostAllResponse> getPublishedPosts(PostReadRequest request) {
+        List<PostAllResponse> posts = postMapper.getPosts(request);
+        for (PostAllResponse post : posts) {
+            String content = post.getContent();
+            if (content == null) {
+                post.setContent("");
+            } else {
+                post.setContent(post.getContent());
+            }
+        }
+        return posts;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public List<PostHistoryResponse> getPostHistory() {
         List<PostHistoryResponse> posts = postMapper.getPostAllHistory();
         return posts;

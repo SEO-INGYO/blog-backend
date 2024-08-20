@@ -27,7 +27,7 @@ public class PostApiController {
     @Operation(summary = "Read", description = "전체 게시글을 조회합니다.")
     @GetMapping("")
     public ResponseEntity<List<PostAllResponse>> getPosts(@ModelAttribute PostReadRequest request) {
-        List<PostAllResponse> posts = postService.getPosts(request);
+        List<PostAllResponse> posts = postService.getPublishedPosts(request);
 
         if (posts.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
