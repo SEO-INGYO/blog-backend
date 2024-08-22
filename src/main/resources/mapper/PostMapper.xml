@@ -35,95 +35,95 @@
         ORDER BY change_time DESC
     </select>
 
-<select id="getPosts" parameterType="com.example.backend.post.dto.api.PostReadRequest" resultType="com.example.backend.post.dto.PostAllResponse">
-    SELECT
-        p.id,
-        p.title,
-        p.content,
-        c.name AS category,
-        p.visible,
-        p.created_time,
-        GROUP_CONCAT(t.name SEPARATOR ', ') AS tags
-    FROM
-        posts p
-    LEFT JOIN
-        categories c ON p.category_id = c.id
-    LEFT JOIN
-        post_tag pt ON p.id = pt.post_id
-    LEFT JOIN
-        tags t ON pt.tag_id = t.id
-    <where>
-        <if test="category != null">
-            AND c.name = #{category}
+    <select id="getPosts" parameterType="com.example.backend.post.dto.api.PostReadRequest" resultType="com.example.backend.post.dto.PostAllResponse">
+        SELECT
+            p.id,
+            p.title,
+            p.content,
+            c.name AS category,
+            p.visible,
+            p.created_time,
+            GROUP_CONCAT(t.name SEPARATOR ', ') AS tags
+        FROM
+            posts p
+        LEFT JOIN
+            categories c ON p.category_id = c.id
+        LEFT JOIN
+            post_tag pt ON p.id = pt.post_id
+        LEFT JOIN
+            tags t ON pt.tag_id = t.id
+        <where>
+            <if test="category != null">
+                AND c.name = #{category}
+            </if>
+            <if test="tag != null and tag.size > 0">
+                AND t.name IN
+                <foreach collection="tag" item="tagName" open="(" separator="," close=")">
+                    #{tagName}
+                </foreach>
+            </if>
+        </where>
+        GROUP BY p.id
+        <choose>
+            <when test="sortType == 'latest'">
+                ORDER BY p.created_time DESC
+            </when>
+            <when test="sortType == 'oldest'">
+                ORDER BY p.created_time ASC
+            </when>
+            <otherwise>
+                <!-- 정렬하지 않음 -->
+            </otherwise>
+        </choose>
+        <if test="limit != null">
+            LIMIT #{limit}
         </if>
-        <if test="tag != null and tag.size > 0">
-            AND t.name IN
-            <foreach collection="tag" item="tagName" open="(" separator="," close=")">
-                #{tagName}
-            </foreach>
-        </if>
-    </where>
-    GROUP BY p.id
-    <choose>
-        <when test="sortType == 'latest'">
-            ORDER BY p.created_time DESC
-        </when>
-        <when test="sortType == 'oldest'">
-            ORDER BY p.created_time ASC
-        </when>
-        <otherwise>
-            <!-- 정렬하지 않음 -->
-        </otherwise>
-    </choose>
-    <if test="limit != null">
-        LIMIT #{limit}
-    </if>
-</select>
+    </select>
 
-<select id="getPublishedPosts" parameterType="com.example.backend.post.dto.api.PostReadRequest" resultType="com.example.backend.post.dto.PostAllResponse">
-    SELECT
-        p.id,
-        p.title,
-        p.content,
-        c.name AS category,
-        p.visible,
-        p.created_time,
-        GROUP_CONCAT(t.name SEPARATOR ', ') AS tags
-    FROM
-        posts p
-    LEFT JOIN
-        categories c ON p.category_id = c.id
-    LEFT JOIN
-        post_tag pt ON p.id = pt.post_id
-    LEFT JOIN
-        tags t ON pt.tag_id = t.id
-    <where>
-        p.visible = "PUBLISHED"
-        <if test="category != null">
-            AND c.name = #{category}
+    <select id="getPublishedPosts" parameterType="com.example.backend.post.dto.api.PostReadRequest" resultType="com.example.backend.post.dto.PostAllResponse">
+        SELECT
+            p.id,
+            p.title,
+            p.content,
+            c.name AS category,
+            p.visible,
+            p.created_time,
+            GROUP_CONCAT(t.name SEPARATOR ', ') AS tags
+        FROM
+            posts p
+        LEFT JOIN
+            categories c ON p.category_id = c.id
+        LEFT JOIN
+            post_tag pt ON p.id = pt.post_id
+        LEFT JOIN
+            tags t ON pt.tag_id = t.id
+        <where>
+            p.visible = "PUBLISHED"
+            <if test="category != null">
+                AND c.name = #{category}
+            </if>
+            <if test="tag != null and tag.size > 0">
+                AND t.name IN
+                <foreach collection="tag" item="tagName" open="(" separator="," close=")">
+                    #{tagName}
+                </foreach>
+            </if>
+        </where>
+        GROUP BY p.id
+        <choose>
+            <when test="sortType == 'latest'">
+                ORDER BY p.created_time DESC
+            </when>
+            <when test="sortType == 'oldest'">
+                ORDER BY p.created_time ASC
+            </when>
+            <otherwise>
+                <!-- 정렬하지 않음 -->
+            </otherwise>
+        </choose>
+        <if test="limit != null">
+            LIMIT #{limit}
         </if>
-        <if test="tag != null and tag.size > 0">
-            AND t.name IN
-            <foreach collection="tag" item="tagName" open="(" separator="," close=")">
-                #{tagName}
-            </foreach>
-        </if>
-    </where>
-    GROUP BY p.id
-    <choose>
-        <when test="sortType == 'latest'">
-            ORDER BY p.created_time DESC
-        </when>
-        <when test="sortType == 'oldest'">
-            ORDER BY p.created_time ASC
-        </when>
-        <otherwise>
-            <!-- 정렬하지 않음 -->
-        </otherwise>
-    </choose>
-    <if test="limit != null">
-        LIMIT #{limit}
-    </if>
-</select>
+    </select>
 
 </mapper>

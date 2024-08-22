@@ -123,6 +123,8 @@ public class PostServiceImpl implements PostService {
         CategoryDto categoryDto = new CategoryDto(post.getCategory().getId(), post.getCategory().getName());
         postDto.setCategory(categoryDto);
 
+        System.out.println(post.getTags());
+
         List<TagDto> tagDtos = post.getTags().stream()
                 .map(postTag -> new TagDto(postTag.getTag().getId(), postTag.getTag().getName()))
                 .collect(Collectors.toList());

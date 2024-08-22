@@ -3,8 +3,10 @@ package com.example.backend.tag.entity;
 import com.example.backend.post.entity.PostTag;
 import com.example.backend.user.entity.User;
 import jakarta.persistence.*;
-import lombok.Data;
 
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.annotations.Comment;
 
 import java.util.ArrayList;
@@ -15,7 +17,9 @@ import com.example.backend.enums.VisibleEnum;
 
 @Entity
 @Table(name="tags", uniqueConstraints = @UniqueConstraint(columnNames = "name"))
-@Data
+@Getter
+@Setter
+@ToString(exclude = {"category", "createdUser", "lastModifiedUser"})
 public class Tag {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
