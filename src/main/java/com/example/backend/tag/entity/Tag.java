@@ -19,7 +19,6 @@ import com.example.backend.enums.VisibleEnum;
 @Table(name="tags", uniqueConstraints = @UniqueConstraint(columnNames = "name"))
 @Getter
 @Setter
-@ToString(exclude = {"category", "createdUser", "lastModifiedUser"})
 public class Tag {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

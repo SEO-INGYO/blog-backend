@@ -38,7 +38,6 @@
     </form>
     <script th:inline="javascript">
         let tags = [[${post.getTags()}]];
-        console.log(tags);
 
         $(document).ready(function() {
             tags.forEach(function(tag) {
@@ -67,6 +66,10 @@
                     return tag.name !== tagToRemove;
                 });
                 updateHiddenTagInput();
+            });
+
+            $('#editor-form').submit(function() {
+                updateHiddenTagInput(); // form 제출 전에 다시 한 번 태그 정보 업데이트
             });
 
             function updateHiddenTagInput() {
